@@ -2,7 +2,9 @@
 <classpath>
 	<classpathentry kind="src" path="src/main/java"/>
 	<classpathentry kind="src" path="src/main/resources"/>
+	<classpathentry kind="src" path="libs"/>
 	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="forms-1.3.0.jar" sourcepath="forms-1.3.0-src.zip"/>
+	<classpathentry kind="lib" path="libs/ini4j-0.5.2-SNAPSHOT.jar"/>
 	<classpathentry kind="output" path="BattleOfLegends/build"/>
 </classpath>
