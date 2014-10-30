@@ -20,7 +20,7 @@ public class LeftPanel extends JPanel {
 		add(textArea);
 	}
 
-	public JTextArea getTextArea() {
+	public JTextArea getConsole() {
 		return textArea;
 	}
 }

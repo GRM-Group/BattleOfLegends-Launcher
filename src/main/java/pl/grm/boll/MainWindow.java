@@ -14,7 +14,8 @@ import pl.grm.boll.components.RightPanel;
 
 public class MainWindow extends JFrame {
 	private JPanel contentPane;
-	private JPanel leftPanel, rightPanel;
+	private RightPanel rightPanel;
+	private LeftPanel leftPanel;
 	private Presenter presenter;
 
 	/**
@@ -63,11 +64,11 @@ public class MainWindow extends JFrame {
 		return contentPane;
 	}
 
-	public JPanel getLeftPanel() {
+	public LeftPanel getLeftPanel() {
 		return leftPanel;
 	}
 
-	public JPanel getRightPanel() {
+	public RightPanel getRightPanel() {
 		return rightPanel;
 	}
 }
