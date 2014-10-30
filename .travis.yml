@@ -1,0 +1,14 @@
+language: java
+jdk:
+  - openjdk7
+  - oraclejdk7
+
+before_install:
+ - gradle check
+ 
+install: gradle jar
+script: gradle build
+    
+branches:
+  only:
+    - master
