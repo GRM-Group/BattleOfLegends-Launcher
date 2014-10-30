@@ -1,7 +1,6 @@
 package pl.grm.boll;
 
 import java.awt.Dimension;
-import java.awt.EventQueue;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
 
@@ -14,31 +13,15 @@ import pl.grm.boll.components.LeftPanel;
 import pl.grm.boll.components.RightPanel;
 
 public class MainWindow extends JFrame {
-
 	private JPanel contentPane;
 	private JPanel leftPanel, rightPanel;
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				try {
-					MainWindow frame = new MainWindow();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+	private Presenter presenter;
 
 	/**
 	 * Create the frame.
 	 */
-	public MainWindow() {
+	public MainWindow(Presenter presenter) {
+		this.presenter = presenter;
 		try {
 			UIManager
 					.setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");
@@ -46,7 +29,7 @@ public class MainWindow extends JFrame {
 			e.printStackTrace();
 		}
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 600, 475);
+		setBounds(100, 100, 600, 600);
 		setTitle("Battle Of Legends Launcher");
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -58,6 +41,7 @@ public class MainWindow extends JFrame {
 		rightPanel = new RightPanel();
 		contentPane.add(rightPanel);
 		pack();
+		presenter.addWindow(this);
 	}
 
 	private Dimension setupBounds() {
@@ -72,5 +56,18 @@ public class MainWindow extends JFrame {
 		dim = new Dimension(frameWidth, frameHeight);
 
 		return dim;
+	}
+
+	@Override
+	public JPanel getContentPane() {
+		return contentPane;
+	}
+
+	public JPanel getLeftPanel() {
+		return leftPanel;
+	}
+
+	public JPanel getRightPanel() {
+		return rightPanel;
 	}
 }

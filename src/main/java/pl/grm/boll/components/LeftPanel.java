@@ -7,15 +7,20 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
 public class LeftPanel extends JPanel {
+	JTextArea textArea;
 
 	/**
 	 * Create the panel.
 	 */
 	public LeftPanel() {
 		setLayout(new CardLayout(0, 0));
-		JTextArea textArea = new JTextArea();
+		textArea = new JTextArea();
 		textArea.setPreferredSize(new Dimension(100, 100));
 		textArea.setEditable(false);
 		add(textArea);
+	}
+
+	public JTextArea getTextArea() {
+		return textArea;
 	}
 }
