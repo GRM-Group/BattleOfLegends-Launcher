@@ -1,6 +1,7 @@
 package pl.grm.boll.components;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 
 import javax.swing.JPanel;
 
@@ -19,10 +20,11 @@ public class RightPanel extends JPanel {
 		setLayout(new BorderLayout(0, 0));
 		loginPanel = new LoginPanel();
 		add(loginPanel, BorderLayout.NORTH);
-		infoPanel = new InfoPanel();
+		infoPanel = new AdvPanel();
 		add(infoPanel, BorderLayout.CENTER);
 		gamePanel = new GamePanel();
 		add(gamePanel, BorderLayout.SOUTH);
+		setMinimumSize(new Dimension(300, 400));
 	}
 	
 	/**
@@ -33,7 +35,7 @@ public class RightPanel extends JPanel {
 	}
 	
 	/**
-	 * @return {@link InfoPanel}
+	 * @return {@link AdvPanel}
 	 */
 	public JPanel getInfoPanel() {
 		return infoPanel;
