@@ -29,8 +29,8 @@ public class GamePanel extends JPanel {
 	 * 
 	 * @param presenter
 	 */
-	public GamePanel(Presenter presenter) {
-		this.presenter = presenter;
+	public GamePanel(Presenter presenterT) {
+		this.presenter = presenterT;
 		setLayout(new GridLayout(2, 4, 0, 0));
 		
 		versioniLabel = new JLabel("Game version:");

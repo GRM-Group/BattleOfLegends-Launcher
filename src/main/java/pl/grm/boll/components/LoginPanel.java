@@ -32,8 +32,8 @@ public class LoginPanel extends JPanel {
 	 * 
 	 * @param presenter
 	 */
-	public LoginPanel(Presenter presenter) {
-		this.presenter = presenter;
+	public LoginPanel(Presenter presenterT) {
+		this.presenter = presenterT;
 		setLayout(new GridLayout(8, 2, 0, 0));
 		
 		loginLabel = new JLabel("Login:");

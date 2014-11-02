@@ -21,8 +21,8 @@ public class RightPanel extends JPanel {
 	 * 
 	 * @param presenter
 	 */
-	public RightPanel(Presenter presenter) {
-		this.presenter = presenter;
+	public RightPanel(Presenter presenterT) {
+		this.presenter = presenterT;
 		setLayout(new BorderLayout(0, 0));
 		loginPanel = new LoginPanel(presenter);
 		add(loginPanel, BorderLayout.NORTH);

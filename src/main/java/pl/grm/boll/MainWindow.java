@@ -26,8 +26,8 @@ public class MainWindow extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public MainWindow(Presenter presenter) {
-		this.presenter = presenter;
+	public MainWindow(Presenter presenterT) {
+		this.presenter = presenterT;
 		try {
 			UIManager.setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");
 		}
@@ -42,7 +42,7 @@ public class MainWindow extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(new GridLayout(0, 2, 0, 0));
 		contentPane.setPreferredSize(setupBounds());
-		leftPanel = new LeftPanel();
+		leftPanel = new LeftPanel(presenter);
 		contentPane.add(leftPanel);
 		rightPanel = new RightPanel(presenter);
 		contentPane.add(rightPanel);
