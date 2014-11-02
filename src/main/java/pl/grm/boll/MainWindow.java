@@ -12,21 +12,26 @@ import javax.swing.border.EmptyBorder;
 import pl.grm.boll.components.LeftPanel;
 import pl.grm.boll.components.RightPanel;
 
+/**
+ * Main Window of Game Launcher
+ * Contains left and right Panels inside own contentPane Panel.
+ * Gets a reference to Presenter object.
+ */
 public class MainWindow extends JFrame {
-	private JPanel contentPane;
-	private RightPanel rightPanel;
-	private LeftPanel leftPanel;
-	private Presenter presenter;
-
+	private JPanel		contentPane;
+	private RightPanel	rightPanel;
+	private LeftPanel	leftPanel;
+	private Presenter	presenter;
+	
 	/**
 	 * Create the frame.
 	 */
 	public MainWindow(Presenter presenter) {
 		this.presenter = presenter;
 		try {
-			UIManager
-					.setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");
-		} catch (Exception e) {
+			UIManager.setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");
+		}
+		catch (Exception e) {
 			e.printStackTrace();
 		}
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -44,30 +49,36 @@ public class MainWindow extends JFrame {
 		pack();
 		presenter.addWindow(this);
 	}
-
+	
+	/**
+	 * Calculates frame's dimensions
+	 * 
+	 * @return {@link Dimension} (x,y)
+	 */
 	private Dimension setupBounds() {
 		Dimension dim;
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-
+		
 		int screenHeight = (int) screenSize.getHeight();
 		int screenWidth = (int) screenSize.getWidth();
 		int frameWidth = screenWidth / 2 - screenWidth / 20;
 		int frameHeight = frameWidth * 3 / 4;
 		setBounds(screenWidth / 4, screenHeight / 2 - frameHeight / 2, 0, 0);
 		dim = new Dimension(frameWidth, frameHeight);
-
+		
 		return dim;
 	}
-
-	@Override
-	public JPanel getContentPane() {
-		return contentPane;
-	}
-
+	
+	/**
+	 * @return {@link LeftPanel} of Launcher
+	 */
 	public LeftPanel getLeftPanel() {
 		return leftPanel;
 	}
-
+	
+	/**
+	 * @return {@link RightPanel} of Launcher
+	 */
 	public RightPanel getRightPanel() {
 		return rightPanel;
 	}

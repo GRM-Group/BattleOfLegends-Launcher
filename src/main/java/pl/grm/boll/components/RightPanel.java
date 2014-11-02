@@ -4,33 +4,45 @@ import java.awt.BorderLayout;
 
 import javax.swing.JPanel;
 
+/**
+ * Contains all setting panels with fields, buttons, etc.
+ */
 public class RightPanel extends JPanel {
-	private JPanel loginPanel;
-	private JPanel gamePanel;
-	private JPanel infoPanel;
-
+	private JPanel	loginPanel;
+	private JPanel	gamePanel;
+	private JPanel	infoPanel;
+	
 	/**
-	 * Create the panel.
+	 * Create the right panel.
 	 */
 	public RightPanel() {
 		setLayout(new BorderLayout(0, 0));
 		loginPanel = new LoginPanel();
 		add(loginPanel, BorderLayout.NORTH);
-		gamePanel = new GamePanel();
-		add(gamePanel, BorderLayout.SOUTH);
 		infoPanel = new InfoPanel();
 		add(infoPanel, BorderLayout.CENTER);
+		gamePanel = new GamePanel();
+		add(gamePanel, BorderLayout.SOUTH);
 	}
-
+	
+	/**
+	 * @return {@link LoginPanel}
+	 */
 	public JPanel getLoginPanel() {
 		return loginPanel;
 	}
-
-	public JPanel getGamePanel() {
-		return gamePanel;
-	}
-
+	
+	/**
+	 * @return {@link InfoPanel}
+	 */
 	public JPanel getInfoPanel() {
 		return infoPanel;
+	}
+	
+	/**
+	 * @return {@link GamePanel}
+	 */
+	public JPanel getGamePanel() {
+		return gamePanel;
 	}
 }

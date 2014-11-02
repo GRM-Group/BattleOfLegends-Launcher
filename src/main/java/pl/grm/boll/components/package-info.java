@@ -1,8 +1,4 @@
 /**
- * 
- */
-/**
- * @author Bolo
- *
+ * Launcher Panels
  */
 package pl.grm.boll.components;

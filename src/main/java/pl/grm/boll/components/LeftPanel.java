@@ -6,11 +6,14 @@ import java.awt.Dimension;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
+/**
+ * Contains Console
+ */
 public class LeftPanel extends JPanel {
-	JTextArea textArea;
-
+	JTextArea	textArea;
+	
 	/**
-	 * Create the panel.
+	 * Create the left panel.
 	 */
 	public LeftPanel() {
 		setLayout(new CardLayout(0, 0));
@@ -19,7 +22,10 @@ public class LeftPanel extends JPanel {
 		textArea.setEditable(false);
 		add(textArea);
 	}
-
+	
+	/**
+	 * @return {@link JTextArea} Console
+	 */
 	public JTextArea getConsole() {
 		return textArea;
 	}
