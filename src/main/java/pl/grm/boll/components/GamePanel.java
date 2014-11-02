@@ -8,6 +8,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 
+import pl.grm.boll.Presenter;
+
 /**
  * Contains game buttons, progress Bar and game info
  */
@@ -20,11 +22,15 @@ public class GamePanel extends JPanel {
 	private JLabel			versioniLabel;
 	private JLabel			versionLabel;
 	private JLabel			label;
+	private Presenter		presenter;
 	
 	/**
 	 * Create the game panel.
+	 * 
+	 * @param presenter
 	 */
-	public GamePanel() {
+	public GamePanel(Presenter presenter) {
+		this.presenter = presenter;
 		setLayout(new GridLayout(2, 4, 0, 0));
 		
 		versioniLabel = new JLabel("Game version:");

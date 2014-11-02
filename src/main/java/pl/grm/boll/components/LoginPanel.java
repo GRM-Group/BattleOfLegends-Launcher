@@ -1,6 +1,8 @@
 package pl.grm.boll.components;
 
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -8,6 +10,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
+
+import pl.grm.boll.Presenter;
 
 /**
  * Contains login/passwd fields and login button.
@@ -21,11 +25,15 @@ public class LoginPanel extends JPanel {
 	private JCheckBox		rememberCheckBox;
 	private JLabel			hasloLabel;
 	private JLabel			loginLabel;
+	private Presenter		presenter;
 	
 	/**
 	 * Create the login panel.
+	 * 
+	 * @param presenter
 	 */
-	public LoginPanel() {
+	public LoginPanel(Presenter presenter) {
+		this.presenter = presenter;
 		setLayout(new GridLayout(8, 2, 0, 0));
 		
 		loginLabel = new JLabel("Login:");
@@ -48,6 +56,12 @@ public class LoginPanel extends JPanel {
 		add(autologinCheckBox);
 		
 		loginButton = new JButton("Login");
+		loginButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				presenter.pressedLoginButton(e);
+			}
+		});
 		add(loginButton);
 		
 		registerButton = new JButton("Rejestracja");

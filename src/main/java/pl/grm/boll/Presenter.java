@@ -1,5 +1,7 @@
 package pl.grm.boll;
 
+import java.awt.event.ActionEvent;
+
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
@@ -35,9 +37,17 @@ public class Presenter {
 	 */
 	public void addWindow(MainWindow mainWindow) {
 		this.mainWindow = mainWindow;
-		this.console = mainWindow.getLeftPanel().getConsole();
+		saveComponentsRefs();
+	}
+	
+	private void saveComponentsRefs() {
+		this.console = this.mainWindow.getLeftPanel().getConsole();
 		this.loginPanel = this.mainWindow.getRightPanel().getLoginPanel();
 		this.infoPanel = this.mainWindow.getRightPanel().getInfoPanel();
 		this.gamePanel = this.mainWindow.getRightPanel().getGamePanel();
+	}
+	
+	public void pressedLoginButton(ActionEvent e) {
+		System.out.println("Login");
 	}
 }

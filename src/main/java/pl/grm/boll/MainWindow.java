@@ -44,7 +44,7 @@ public class MainWindow extends JFrame {
 		contentPane.setPreferredSize(setupBounds());
 		leftPanel = new LeftPanel();
 		contentPane.add(leftPanel);
-		rightPanel = new RightPanel();
+		rightPanel = new RightPanel(presenter);
 		contentPane.add(rightPanel);
 		setMinimumSize(new Dimension(400, 400));
 		pack();
