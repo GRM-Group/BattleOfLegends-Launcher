@@ -23,7 +23,7 @@ public class Presenter {
 	private JPanel			gamePanel;
 	
 	/**
-	 * Constructor
+	 * Presenter Constructor
 	 */
 	public Presenter() {
 		configHandler = new ConfigHandler();

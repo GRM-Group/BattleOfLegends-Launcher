@@ -2,9 +2,7 @@
 <classpath>
 	<classpathentry kind="src" path="src/main/java"/>
 	<classpathentry kind="src" path="src/main/resources"/>
-	<classpathentry kind="src" path="libs"/>
 	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="forms-1.3.0.jar" sourcepath="forms-1.3.0-src.zip"/>
-	<classpathentry kind="lib" path="libs/ini4j-0.5.2-SNAPSHOT.jar"/>
-	<classpathentry kind="output" path="build"/>
+	<classpathentry exported="true" kind="lib" path="C:/Users/Łukasz/.gradle/caches/modules-2/files-2.1/org.ini4j/ini4j/0.5.2/16561cb11c221b5928119e10d7636c95ee5c960d/ini4j-0.5.2.jar" sourcepath="C:/Users/Łukasz/.gradle/caches/modules-2/files-2.1/org.ini4j/ini4j/0.5.2/17a383f897ae0ec8fca2f3effc2a2b8dbb336fc2/ini4j-0.5.2-sources.jar"/>
+	<classpathentry kind="output" path="bin"/>
 </classpath>
