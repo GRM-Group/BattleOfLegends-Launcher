@@ -1,4 +1,4 @@
-package pl.grm.boll.components;
+package pl.grm.boll.panels;
 
 import java.awt.CardLayout;
 import java.awt.Dimension;

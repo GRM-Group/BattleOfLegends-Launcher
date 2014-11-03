@@ -1,4 +1,4 @@
-package pl.grm.boll.components;
+package pl.grm.boll.panels;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -11,9 +11,9 @@ import pl.grm.boll.Presenter;
  * Contains all setting panels with fields, buttons, etc.
  */
 public class RightPanel extends JPanel {
-	private JPanel		loginPanel;
-	private JPanel		gamePanel;
-	private JPanel		infoPanel;
+	private LoginPanel	loginPanel;
+	private GamePanel	gamePanel;
+	private AdvPanel	advPanel;
 	private Presenter	presenter;
 	
 	/**
@@ -26,8 +26,8 @@ public class RightPanel extends JPanel {
 		setLayout(new BorderLayout(0, 0));
 		loginPanel = new LoginPanel(presenter);
 		add(loginPanel, BorderLayout.NORTH);
-		infoPanel = new AdvPanel();
-		add(infoPanel, BorderLayout.CENTER);
+		advPanel = new AdvPanel();
+		add(advPanel, BorderLayout.CENTER);
 		gamePanel = new GamePanel(presenter);
 		add(gamePanel, BorderLayout.SOUTH);
 		setMinimumSize(new Dimension(300, 400));
@@ -36,21 +36,21 @@ public class RightPanel extends JPanel {
 	/**
 	 * @return {@link LoginPanel}
 	 */
-	public JPanel getLoginPanel() {
+	public LoginPanel getLoginPanel() {
 		return loginPanel;
 	}
 	
 	/**
 	 * @return {@link AdvPanel}
 	 */
-	public JPanel getInfoPanel() {
-		return infoPanel;
+	public AdvPanel getAdvPanel() {
+		return advPanel;
 	}
 	
 	/**
 	 * @return {@link GamePanel}
 	 */
-	public JPanel getGamePanel() {
+	public GamePanel getGamePanel() {
 		return gamePanel;
 	}
 }

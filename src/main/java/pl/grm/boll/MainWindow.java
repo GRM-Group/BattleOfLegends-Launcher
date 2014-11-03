@@ -9,8 +9,8 @@ import javax.swing.JPanel;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 
-import pl.grm.boll.components.LeftPanel;
-import pl.grm.boll.components.RightPanel;
+import pl.grm.boll.panels.LeftPanel;
+import pl.grm.boll.panels.RightPanel;
 
 /**
  * Main Window of Game Launcher
