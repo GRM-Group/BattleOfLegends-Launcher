@@ -41,31 +41,6 @@ task execJar(type: OneJar) {
     archiveName = archivesBaseName+"-"+version+"-SNAPSHOT.jar"
 }
 
-task writePom << {
-  pom {
-    project {
-      inceptionYear '2014'
-      licenses {
-        license {
-          name 'The Apache Software License, Version 2.0'
-          url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-          distribution 'repo'
-        }
-      }
-    }
-  }.writeTo("$projectDir/pom.xml")
-}
- 
-pmd {
-  ignoreFailures = true
-  sourceSets = [sourceSets.main]
-  reportsDir = file("$project.buildDir/reports/pmd")
-  ruleSets = [
-    "basic",
-    "braces"
-  ]
-}
-
 check << {
   File outDir = new File('build/reports/pmd/')
   outDir.mkdirs()
@@ -77,4 +52,8 @@ check << {
       include(name: '**/*.java')
     }
   }
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.1'
 }
