@@ -2,9 +2,12 @@ language: java
 jdk:
   - openjdk7
   - oraclejdk7
+
+before_install:
+ - chmod +x gradlew
  
-install: gradle execJar
-script: gradle build
+install: ./gradlew execJar
+script: ./gradlew build
     
 branches:
   only:
