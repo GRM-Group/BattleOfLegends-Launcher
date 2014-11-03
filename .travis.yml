@@ -6,7 +6,7 @@ jdk:
 before_install:
  - gradle check
  
-install: gradle jar
+install: gradle execJar
 script: gradle build
     
 branches:

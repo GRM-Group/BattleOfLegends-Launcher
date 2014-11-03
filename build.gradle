@@ -2,9 +2,20 @@ apply plugin: 'java'
 apply plugin: 'pmd'
 apply plugin: 'application'
 apply plugin: 'eclipse'
+apply plugin: 'gradle-one-jar'
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+         classpath 'com.github.rholder:gradle-one-jar:1.0.4'
+    }
+}
 
 version = "0.0.0"
 group= "pl.grm"
+
 description = 'BOL Game Launcher'
 archivesBaseName = "BattleOfLegends-Launcher"
 mainClassName = 'pl.grm.boll.Launcher'
@@ -19,9 +30,15 @@ dependencies {
 }
 
 jar {
-    manifest {
-        attributes 'Main-Class': 'pl.grm.boll.Launcher'
-    }
+	manifest {
+	attributes "Main-Class": "pl.grm.boll.Launcher"
+	attributes "Class-Path": configurations.compile.collect { it.getName() }.join(' ')
+	}
+}
+
+task execJar(type: OneJar) {
+    mainClass = mainClassName
+    archiveName = archivesBaseName+"-"+version+"-SNAPSHOT.jar"
 }
 
 task writePom << {

@@ -7,14 +7,10 @@ import org.ini4j.InvalidFileFormatException;
 import org.ini4j.Wini;
 
 public class ConfigHandler {
-	private Wini ini;
-	private File file;
-	private String fileName = "config.ini";
-
-	public ConfigHandler() {
-
-	}
-
+	private Wini	ini;
+	private File	file;
+	private String	fileName	= "config.ini";
+	
 	public void readConfigFile() {
 		file = new File(fileName);
 		if (file.exists()) {
@@ -23,23 +19,26 @@ public class ConfigHandler {
 			createFile();
 		}
 	}
-
+	
 	private void readIni() {
 		try {
 			ini = new Wini(file);
-		} catch (InvalidFileFormatException e) {
+		}
+		catch (InvalidFileFormatException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (IOException e) {
+		}
+		catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-
+	
 	private void createFile() {
 		try {
 			file.createNewFile();
-		} catch (IOException e) {
+		}
+		catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
