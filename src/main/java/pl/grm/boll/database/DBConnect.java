@@ -15,7 +15,8 @@ public class DBConnect {
 			+ dblogin + "&password=" + dbpassword;
 	private Connection connection;
 	private boolean connected = false;
-	private String sel = "SELECT ", upd = "UPDATE ", wf = " FROM Users WHERE ";
+	private String selLOG = "SELECT login ", upd = "UPDATE ",
+			wf = "FROM Users WHERE ";
 
 	public DBConnect() {
 		try {
@@ -30,8 +31,8 @@ public class DBConnect {
 		try {
 			connection = DriverManager.getConnection(URL);
 			statement = connection.createStatement();
-			rs = statement.executeQuery(sel + "login" + wf + "login='" + login
-					+ "';");
+			String query = selLOG + wf + "login='" + login + "';";
+			rs = statement.executeQuery(query);
 			if (rs.next()) {
 				connected = true;
 			}
