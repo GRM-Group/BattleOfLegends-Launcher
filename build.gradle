@@ -18,7 +18,7 @@ version = "0.0.0"
 group= "pl.grm"
 
 description = 'BOL Game Launcher'
-archivesBaseName = "BattleOfLegends-Launcher"
+archivesBaseName = "BoL-Launcher"
 mainClassName = 'pl.grm.boll.Launcher'
 
 repositories {
