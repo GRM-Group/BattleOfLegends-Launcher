@@ -26,11 +26,12 @@ public class RightPanel extends JPanel {
 		setLayout(new BorderLayout(0, 0));
 		loginPanel = new LoginPanel(presenter);
 		add(loginPanel, BorderLayout.NORTH);
-		advPanel = new AdvPanel();
+		advPanel = new AdvPanel(presenter);
 		add(advPanel, BorderLayout.CENTER);
 		gamePanel = new GamePanel(presenter);
 		add(gamePanel, BorderLayout.SOUTH);
 		setMinimumSize(new Dimension(300, 400));
+		setBackground(presenter.getBgColor());
 	}
 	
 	/**

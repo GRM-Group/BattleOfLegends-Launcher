@@ -34,16 +34,12 @@ public class GamePanel extends JPanel {
 	public GamePanel(Presenter presenterT) {
 		this.presenter = presenterT;
 		setLayout(new GridLayout(2, 4, 0, 0));
-		
 		versioniLabel = new JLabel("Game version:");
 		add(versioniLabel);
-		
 		versionLabel = new JLabel("0.0.0");
 		add(versionLabel);
-		
 		label = new JLabel("");
 		add(label);
-		
 		settingsButton = new JButton("Opcje");
 		settingsButton.addActionListener(new ActionListener() {
 			@Override
@@ -52,17 +48,13 @@ public class GamePanel extends JPanel {
 			}
 		});
 		add(settingsButton);
-		
 		patchLabel = new JLabel("_______________");
 		add(patchLabel);
-		
 		updateProgressBar = new JProgressBar();
 		updateProgressBar.setStringPainted(true);
 		add(updateProgressBar);
-		
 		typeCheckBox = new JCheckBox("Online");
 		add(typeCheckBox);
-		
 		launchButton = new JButton("Start");
 		launchButton.addActionListener(new ActionListener() {
 			@Override
@@ -71,6 +63,7 @@ public class GamePanel extends JPanel {
 			}
 		});
 		add(launchButton);
+		setBackground(presenter.getBgColor());
 	}
 	
 	/**

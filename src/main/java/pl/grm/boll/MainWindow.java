@@ -59,14 +59,12 @@ public class MainWindow extends JFrame {
 	private Dimension setupBounds() {
 		Dimension dim;
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		
 		int screenHeight = (int) screenSize.getHeight();
 		int screenWidth = (int) screenSize.getWidth();
 		int frameWidth = screenWidth / 2 - screenWidth / 20;
 		int frameHeight = frameWidth * 3 / 4;
 		setBounds(screenWidth / 4, screenHeight / 2 - frameHeight / 2, 0, 0);
 		dim = new Dimension(frameWidth, frameHeight);
-		
 		return dim;
 	}
 	

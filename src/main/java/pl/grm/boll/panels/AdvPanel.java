@@ -5,6 +5,8 @@ import java.awt.GridLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import pl.grm.boll.Presenter;
+
 /**
  * Contains advertises
  */
@@ -14,12 +16,11 @@ public class AdvPanel extends JPanel {
 	/**
 	 * Create the info/settings panel.
 	 */
-	public AdvPanel() {
-		
+	public AdvPanel(Presenter presenter) {
 		banerLabel = new JLabel("_________");
 		setLayout(new GridLayout(2, 3, 0, 0));
 		add(banerLabel);
-		
+		setBackground(presenter.getBgColor());
 	}
 	
 	/**
