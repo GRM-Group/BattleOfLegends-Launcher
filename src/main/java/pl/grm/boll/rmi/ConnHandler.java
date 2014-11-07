@@ -79,8 +79,8 @@ public class ConnHandler {
 		Result result;
 		if (checkIfExists(login)) {
 			try {
-				result = dbHandler.checkPasswd(String.valueOf(password));
-				return result.getTruefalse();
+				result = dbHandler.checkPasswd(login, String.valueOf(password));
+				return result.isResultBoolean();
 			}
 			catch (RemoteException e) {
 				logger.log(Level.SEVERE, e.toString(), e);
