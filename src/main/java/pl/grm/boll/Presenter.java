@@ -3,6 +3,8 @@ package pl.grm.boll;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.util.concurrent.ExecutionException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.JTextArea;
 import javax.swing.SwingWorker;
@@ -29,6 +31,7 @@ public class Presenter {
 	private String			login;
 	private char[]			password;
 	private Color			bgColor	= new Color(0, 139, 139);
+	private Logger			logger;
 	
 	/**
 	 * Presenter Constructor
@@ -90,11 +93,11 @@ public class Presenter {
 					console.append(super.get().toString());
 				}
 				catch (InterruptedException e) {
-					// TODO Auto-generated catch block
+					logger.log(Level.SEVERE, e.toString(), e);
 					e.printStackTrace();
 				}
 				catch (ExecutionException e) {
-					// TODO Auto-generated catch block
+					logger.log(Level.SEVERE, e.toString(), e);
 					e.printStackTrace();
 				}
 			}
@@ -138,5 +141,9 @@ public class Presenter {
 	
 	public Color getBgColor() {
 		return this.bgColor;
+	}
+	
+	public void setLogger(Logger logger) {
+		this.logger = logger;
 	}
 }

@@ -18,22 +18,26 @@ import pl.grm.boll.rmi.ConnHandler;
 public class ConfigHandler {
 	private Wini		ini;
 	private File		file;
-	private String		fileName	= "config.ini";
+	private String		configFileName	= "config.ini";
 	private Presenter	presenter;
 	private ConnHandler	connHandler;
 	private FileHandler	fHandler;
 	private Logger		logger;
+	private String		APP_DATA		= System.getenv("APPDATA");
+	private String		BoL_Conf_Loc	= APP_DATA + "\\BoL\\";
+	private String		logFileName		= "launcher.log";
 	
 	public ConfigHandler(Presenter presenter) {
 		this.presenter = presenter;
 		setupLogger();
 		connHandler = new ConnHandler(logger);
+		presenter.setLogger(logger);
 	}
 	
 	private void setupLogger() {
 		logger = Logger.getLogger(ConfigHandler.class.getName());
 		try {
-			fHandler = new FileHandler("launcher.log", 1048476, 1, true);
+			fHandler = new FileHandler(BoL_Conf_Loc + logFileName, 1048476, 1, true);
 			logger.addHandler(fHandler);
 			SimpleFormatter formatter = new SimpleFormatter();
 			fHandler.setFormatter(formatter);
@@ -46,10 +50,15 @@ public class ConfigHandler {
 			logger.log(Level.SEVERE, e.toString(), e);
 			e.printStackTrace();
 		}
+		logger.info("Config&Log Location: " + BoL_Conf_Loc);
 	}
 	
 	public void readConfigFile() {
-		file = new File(fileName);
+		File dir = new File(BoL_Conf_Loc);
+		if (!dir.exists()) {
+			dir.mkdir();
+		}
+		file = new File(BoL_Conf_Loc + configFileName);
 		if (file.exists()) {
 			readIni();
 		} else {
