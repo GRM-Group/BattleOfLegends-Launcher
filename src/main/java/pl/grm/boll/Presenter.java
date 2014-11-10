@@ -10,6 +10,7 @@ import javax.swing.SwingWorker;
 
 import pl.grm.boll.boxes.SettingsDialog;
 import pl.grm.boll.config.ConfigHandler;
+import pl.grm.boll.config.FileOperation;
 import pl.grm.boll.panels.AdvPanel;
 import pl.grm.boll.panels.GamePanel;
 import pl.grm.boll.panels.LoggedPanel;
@@ -145,12 +146,16 @@ public class Presenter {
 		SwingWorker<Boolean, Void> worker = new SwingWorker<Boolean, Void>() {
 			@Override
 			protected Boolean doInBackground() throws Exception {
+				FileOperation fileOp = configHandler.getFileOp();
+				if (configHandler.checkLastVersion()) {
+
+				}
 				return null;
 			}
 
 			@Override
 			protected void done() {
-				console.append("Start\n");
+				console.append("Start game\n");
 			}
 		};
 		worker.execute();

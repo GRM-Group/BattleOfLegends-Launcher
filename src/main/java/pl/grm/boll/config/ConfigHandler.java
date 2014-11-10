@@ -2,6 +2,8 @@ package pl.grm.boll.config;
 
 import java.awt.Desktop;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.net.URL;
 import java.util.logging.FileHandler;
@@ -11,6 +13,7 @@ import java.util.logging.SimpleFormatter;
 
 import javax.swing.JTextArea;
 
+import org.ini4j.Ini;
 import org.ini4j.InvalidFileFormatException;
 import org.ini4j.Wini;
 
@@ -29,14 +32,47 @@ public class ConfigHandler {
 	private FileHandler fHandler;
 	private Logger logger;
 	private JTextArea console;
+	private FileOperation fileOp;
 
 	public ConfigHandler(Presenter presenter) {
 		this.presenter = presenter;
 		setupLogger();
 		connHandler = new ConnHandler(logger);
+		fileOp = new FileOperation(logger);
 		presenter.setLogger(logger);
 	}
 
+	public boolean checkLastVersion() {
+		Ini sIni = new Ini();
+		FileReader fr;
+		try {
+			URL url = new URL("http://grm-dev.pl/bol/version.ini");
+			sIni.load(url);
+			String sVersion = sIni.get("Launcher", "last_version");
+			String lVersion = ini.get("Launcher", "version");
+
+			VersionComparator cmp = new VersionComparator();
+			int result = cmp.compare(sVersion, lVersion);
+			String lol = "==";
+			if (result < 0) {
+				lol = "<";
+			} else if (result > 0) {
+				lol = ">";
+			}
+			System.out.printf("%s %s %s \n", sVersion, result, lVersion);
+			return true;
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvalidFileFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return false;
+	}
 	private void setupLogger() {
 		logger = Logger.getLogger(ConfigHandler.class.getName());
 		try {
@@ -88,6 +124,7 @@ public class ConfigHandler {
 		try {
 			Desktop.getDesktop().browse(new URL(urlString).toURI());
 		} catch (Exception e) {
+
 		}
 	}
 
@@ -98,5 +135,9 @@ public class ConfigHandler {
 	public void setConsole(JTextArea console) {
 		this.console = console;
 		connHandler.setConsole(console);
+	}
+
+	public FileOperation getFileOp() {
+		return fileOp;
 	}
 }
