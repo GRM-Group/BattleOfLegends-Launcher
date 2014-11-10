@@ -17,7 +17,6 @@ public class ConnHandler {
 	private Logger		logger;
 	
 	public ConnHandler(Logger logger) {
-		
 		this.logger = logger;
 		try {
 			dbHandler = connect();
@@ -40,6 +39,14 @@ public class ConnHandler {
 		}
 	}
 	
+	/**
+	 * Connects to server with dBControls.
+	 * 
+	 * @return {@link LauncherDB} interface server implementation
+	 * @throws RemoteException
+	 * @throws NotBoundException
+	 * @throws AccessException
+	 */
 	private static LauncherDB connect() throws RemoteException, NotBoundException,
 			AccessException {
 		Registry registry = LocateRegistry.getRegistry("localhost", 1234);
@@ -47,14 +54,7 @@ public class ConnHandler {
 		return dbHandler;
 	}
 	
-	public LauncherDB getDbHandler() {
-		return dbHandler;
-	}
-	
 	public Boolean register(String login, char[] password) {
-		Result result;
-		String resultString;
-		
 		return checkIfExists(login);
 	}
 	

@@ -16,16 +16,16 @@ import pl.grm.boll.Presenter;
 import pl.grm.boll.rmi.ConnHandler;
 
 public class ConfigHandler {
+	private String		APP_DATA		= System.getenv("APPDATA");
+	private String		BoL_Conf_Loc	= APP_DATA + "\\BoL\\";
+	private String		logFileName		= "launcher.log";
+	private String		configFileName	= "config.ini";
 	private Wini		ini;
 	private File		file;
-	private String		configFileName	= "config.ini";
 	private Presenter	presenter;
 	private ConnHandler	connHandler;
 	private FileHandler	fHandler;
 	private Logger		logger;
-	private String		APP_DATA		= System.getenv("APPDATA");
-	private String		BoL_Conf_Loc	= APP_DATA + "\\BoL\\";
-	private String		logFileName		= "launcher.log";
 	
 	public ConfigHandler(Presenter presenter) {
 		this.presenter = presenter;

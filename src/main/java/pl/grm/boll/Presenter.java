@@ -51,6 +51,9 @@ public class Presenter {
 		saveComponentsRefs();
 	}
 	
+	/**
+	 * Saves references to objects in panels.
+	 */
 	private void saveComponentsRefs() {
 		this.console = this.mainWindow.getLeftPanel().getConsole();
 		this.loginPanel = this.mainWindow.getRightPanel().getLoginPanel();
