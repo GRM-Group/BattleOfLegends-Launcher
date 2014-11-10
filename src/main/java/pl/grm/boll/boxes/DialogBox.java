@@ -2,7 +2,6 @@ package pl.grm.boll.boxes;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -12,6 +11,7 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 public class DialogBox extends JDialog {
 	private JPanel		buttonPanel;
@@ -48,7 +48,7 @@ public class DialogBox extends JDialog {
 	}
 	
 	public void showBox() {
-		EventQueue.invokeLater(new Runnable() {
+		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
 				try {

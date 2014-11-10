@@ -1,7 +1,6 @@
 package pl.grm.boll;
 
 import java.awt.Color;
-import java.awt.event.ActionEvent;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -9,9 +8,11 @@ import java.util.logging.Logger;
 import javax.swing.JTextArea;
 import javax.swing.SwingWorker;
 
+import pl.grm.boll.boxes.SettingsDialog;
 import pl.grm.boll.config.ConfigHandler;
 import pl.grm.boll.panels.AdvPanel;
 import pl.grm.boll.panels.GamePanel;
+import pl.grm.boll.panels.LoggedPanel;
 import pl.grm.boll.panels.LoginPanel;
 
 /**
@@ -24,14 +25,15 @@ import pl.grm.boll.panels.LoginPanel;
 public class Presenter {
 	private MainWindow		mainWindow;
 	private ConfigHandler	configHandler;
-	private JTextArea		console;
 	private LoginPanel		loginPanel;
+	private LoggedPanel		loggedPanel;
 	private AdvPanel		advPanel;
 	private GamePanel		gamePanel;
 	private String			login;
 	private char[]			password;
 	private Color			bgColor	= new Color(0, 139, 139);
 	private Logger			logger;
+	private JTextArea		console;
 	
 	/**
 	 * Presenter Constructor
@@ -49,6 +51,7 @@ public class Presenter {
 	public void addWindow(MainWindow mainWindow) {
 		this.mainWindow = mainWindow;
 		saveComponentsRefs();
+		configHandler.setConsole(console);
 	}
 	
 	/**
@@ -57,11 +60,15 @@ public class Presenter {
 	private void saveComponentsRefs() {
 		this.console = this.mainWindow.getLeftPanel().getConsole();
 		this.loginPanel = this.mainWindow.getRightPanel().getLoginPanel();
+		this.loggedPanel = this.mainWindow.getRightPanel().getLoggedPanel();
 		this.advPanel = this.mainWindow.getRightPanel().getAdvPanel();
 		this.gamePanel = this.mainWindow.getRightPanel().getGamePanel();
 	}
 	
-	public synchronized void pressedLoginButton(ActionEvent e) {
+	public synchronized void pressedLoginButton(String loginT, char[] passwordT) {
+		this.login = loginT;
+		this.password = passwordT;
+		console.append("Logowanie ... \n");
 		SwingWorker<Boolean, Void> worker = new SwingWorker<Boolean, Void>() {
 			@Override
 			protected Boolean doInBackground() throws Exception {
@@ -73,36 +80,45 @@ public class Presenter {
 			
 			@Override
 			protected void done() {
-				console.append("Login\n");
-				loginPanel.getLoginButton().setEnabled(true);
+				try {
+					loginPanel.getLoginButton().setEnabled(true);
+					gamePanel.getProgressBar().setIndeterminate(false);
+					if (super.get()) {
+						console.append("Zalogowano pomyslnie\n");
+						logger.info("Zalogowano pomyslnie\n");
+						loginPanel.setVisible(false);
+						loggedPanel.getLblLoggedAs().setText(login);
+						loggedPanel.setVisible(true);
+					} else {
+						console.append("Wystapi³ problem z logowaniem.\n");
+						logger.info("Wystapi³ problem z logowaniem.\n");
+					}
+				}
+				catch (InterruptedException e) {
+					logger.log(Level.SEVERE, e.toString(), e);
+				}
+				catch (ExecutionException e) {
+					logger.log(Level.SEVERE, e.toString(), e);
+				}
 			}
 		};
 		worker.execute();
 	}
 	
-	public synchronized void pressedRegisterButton(String loginT, char[] passwordT) {
-		this.login = loginT;
-		this.password = passwordT;
-		SwingWorker<Boolean, Void> worker = new SwingWorker<Boolean, Void>() {
+	public synchronized void pressedRegisterButton() {
+		SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
 			@Override
-			protected Boolean doInBackground() throws Exception {
+			protected Void doInBackground() throws Exception {
+				console.append("Otwieranie przegladarki ... \n");
 				gamePanel.getProgressBar().setIndeterminate(true);
-				return configHandler.register(login, password);
+				ConfigHandler.openWebpage("https://www.youtube.com/");
+				return null;
 			}
 			
 			@Override
 			protected void done() {
-				try {
-					console.append(super.get().toString());
-				}
-				catch (InterruptedException e) {
-					logger.log(Level.SEVERE, e.toString(), e);
-					e.printStackTrace();
-				}
-				catch (ExecutionException e) {
-					logger.log(Level.SEVERE, e.toString(), e);
-					e.printStackTrace();
-				}
+				console.append("Otwarto Przegladarke. \n");
+				gamePanel.getProgressBar().setIndeterminate(false);
 			}
 		};
 		worker.execute();
@@ -112,6 +128,9 @@ public class Presenter {
 		SwingWorker<Boolean, Void> worker = new SwingWorker<Boolean, Void>() {
 			@Override
 			protected Boolean doInBackground() throws Exception {
+				SettingsDialog setDBox = new SettingsDialog(Presenter.this);
+				setDBox.setVisible(true);
+				setDBox.setModal(true);
 				return null;
 			}
 			
@@ -138,6 +157,20 @@ public class Presenter {
 		worker.execute();
 	}
 	
+	public void pressedLogoutButton() {
+		SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
+			@Override
+			protected Void doInBackground() throws Exception {
+				loginPanel.setVisible(true);
+				loggedPanel.setVisible(false);
+				console.append("Wylogowano.\n");
+				logger.info("Wylogowano.\n");
+				return null;
+			}
+		};
+		worker.execute();
+	}
+	
 	public MainWindow getMainWindow() {
 		return mainWindow;
 	}
@@ -148,5 +181,9 @@ public class Presenter {
 	
 	public void setLogger(Logger logger) {
 		this.logger = logger;
+	}
+	
+	public JTextArea getConsole() {
+		return this.console;
 	}
 }

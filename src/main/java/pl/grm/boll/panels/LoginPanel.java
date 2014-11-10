@@ -52,7 +52,7 @@ public class LoginPanel extends JPanel {
 		loginButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				presenter.pressedLoginButton(e);
+				presenter.pressedLoginButton(loginField.getText(), passwordField.getPassword());
 			}
 		});
 		add(loginButton);
@@ -60,8 +60,7 @@ public class LoginPanel extends JPanel {
 		registerButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				presenter.pressedRegisterButton(loginField.getText(),
-						passwordField.getPassword());
+				presenter.pressedRegisterButton();
 			}
 		});
 		add(registerButton);

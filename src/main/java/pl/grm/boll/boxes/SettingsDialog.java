@@ -8,28 +8,17 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import pl.grm.boll.Presenter;
+
 public class SettingsDialog extends JDialog {
-	
 	private final JPanel	contentPanel	= new JPanel();
 	
 	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		try {
-			SettingsDialog dialog = new SettingsDialog();
-			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-			dialog.setVisible(true);
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-	
-	/**
 	 * Create the dialog.
+	 * 
+	 * @param presenter
 	 */
-	public SettingsDialog() {
+	public SettingsDialog(Presenter presenter) {
 		setBounds(100, 100, 450, 300);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setLayout(new FlowLayout());

@@ -1,7 +1,9 @@
 package pl.grm.boll.config;
 
+import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -26,6 +28,7 @@ public class ConfigHandler {
 	private ConnHandler	connHandler;
 	private FileHandler	fHandler;
 	private Logger		logger;
+	private JTextArea	console;
 	
 	public ConfigHandler(Presenter presenter) {
 		this.presenter = presenter;
@@ -44,11 +47,9 @@ public class ConfigHandler {
 		}
 		catch (SecurityException e) {
 			logger.log(Level.SEVERE, e.toString(), e);
-			e.printStackTrace();
 		}
 		catch (IOException e) {
 			logger.log(Level.SEVERE, e.toString(), e);
-			e.printStackTrace();
 		}
 		logger.info("Config&Log Location: " + BoL_Conf_Loc);
 	}
@@ -72,11 +73,9 @@ public class ConfigHandler {
 		}
 		catch (InvalidFileFormatException e) {
 			logger.log(Level.SEVERE, e.toString(), e);
-			e.printStackTrace();
 		}
 		catch (IOException e) {
 			logger.log(Level.SEVERE, e.toString(), e);
-			e.printStackTrace();
 		}
 	}
 	
@@ -86,21 +85,22 @@ public class ConfigHandler {
 		}
 		catch (IOException e) {
 			logger.log(Level.SEVERE, e.toString(), e);
-			e.printStackTrace();
 		}
 	}
 	
-	public Boolean register(String login, char[] password) {
-		JTextArea console = presenter.getMainWindow().getLeftPanel().getConsole();
-		console.append(login + "\n");
-		
-		return connHandler.register(login, password);
+	public static void openWebpage(String urlString) {
+		try {
+			Desktop.getDesktop().browse(new URL(urlString).toURI());
+		}
+		catch (Exception e) {}
 	}
 	
 	public Boolean login(String login, char[] password) {
-		JTextArea console = presenter.getMainWindow().getLeftPanel().getConsole();
-		console.append(login + "\n");
-		
 		return connHandler.login(login, password);
+	}
+	
+	public void setConsole(JTextArea console) {
+		this.console = console;
+		connHandler.setConsole(console);
 	}
 }

@@ -8,6 +8,8 @@ import java.rmi.registry.Registry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.swing.JTextArea;
+
 import pl.grm.boll.boxes.DialogBox;
 import pl.grm.boll.lib.LauncherDB;
 import pl.grm.boll.lib.Result;
@@ -15,6 +17,7 @@ import pl.grm.boll.lib.Result;
 public class ConnHandler {
 	private LauncherDB	dbHandler;
 	private Logger		logger;
+	private JTextArea	console;
 	
 	public ConnHandler(Logger logger) {
 		this.logger = logger;
@@ -23,7 +26,6 @@ public class ConnHandler {
 		}
 		catch (AccessException e) {
 			logger.log(Level.SEVERE, e.toString(), e);
-			e.printStackTrace();
 		}
 		catch (RemoteException e) {
 			DialogBox dBox = new DialogBox();
@@ -31,11 +33,9 @@ public class ConnHandler {
 			dBox.setModal(true);
 			dBox.showBox();
 			logger.log(Level.SEVERE, e.toString(), e);
-			e.printStackTrace();
 		}
 		catch (NotBoundException e) {
 			logger.log(Level.SEVERE, e.toString(), e);
-			e.printStackTrace();
 		}
 	}
 	
@@ -47,46 +47,62 @@ public class ConnHandler {
 	 * @throws NotBoundException
 	 * @throws AccessException
 	 */
-	private static LauncherDB connect() throws RemoteException, NotBoundException,
-			AccessException {
+	private static LauncherDB connect() throws RemoteException, NotBoundException, AccessException {
 		Registry registry = LocateRegistry.getRegistry("localhost", 1234);
 		LauncherDB dbHandler = (LauncherDB) registry.lookup("dBConfBindHandler");
 		return dbHandler;
 	}
 	
-	public Boolean register(String login, char[] password) {
-		return checkIfExists(login);
-	}
-	
 	private Boolean checkIfExists(String login) {
-		Result result;
+		Result result = null;
 		String resultString;
 		try {
 			result = dbHandler.checkIfExists(login);
-			if (result.getResultString() != null) {
-				resultString = result.getResultString();
-				if (resultString.equals(login)) { return true; }
-			}
 		}
 		catch (RemoteException e) {
 			logger.log(Level.SEVERE, e.toString(), e);
-			e.printStackTrace();
+			return false;
+		}
+		if (result.getException() == null) {
+			if (result.getResultString() != null) {
+				resultString = result.getResultString();
+				if (resultString.equals(login)) { return true; }
+			} else {
+				String str = "Brak gracza o padanym loginie: " + login + "\n";
+				logger.info(str);
+				console.append(str);
+			}
+		} else {
+			logger.log(Level.SEVERE, result.getException().toString(), result.getException());
 		}
 		return false;
 	}
 	
+	/**
+	 * @param login
+	 * @param password
+	 * @return true if correct login & password
+	 */
 	public Boolean login(String login, char[] password) {
-		Result result;
+		Result result = null;
 		if (checkIfExists(login)) {
 			try {
 				result = dbHandler.checkPasswd(login, String.valueOf(password));
-				return result.isResultBoolean();
 			}
 			catch (RemoteException e) {
 				logger.log(Level.SEVERE, e.toString(), e);
-				e.printStackTrace();
+				return false;
 			}
+			boolean correct = result.isResultBoolean();
+			if (correct) { return true; }
+			String str = "B³edne has³o. \n";
+			logger.info(str);
+			console.append(str);
 		}
 		return false;
+	}
+	
+	public void setConsole(JTextArea console) {
+		this.console = console;
 	}
 }
