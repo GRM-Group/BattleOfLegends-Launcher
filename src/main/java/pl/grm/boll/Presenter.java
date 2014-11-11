@@ -24,18 +24,18 @@ import pl.grm.boll.panels.LoginPanel;
  * This presenter has also some kind of temp model.
  */
 public class Presenter {
-	private MainWindow mainWindow;
-	private ConfigHandler configHandler;
-	private LoginPanel loginPanel;
-	private LoggedPanel loggedPanel;
-	private AdvPanel advPanel;
-	private GamePanel gamePanel;
-	private String login;
-	private char[] password;
-	private Color bgColor = new Color(0, 139, 139);
-	private Logger logger;
-	private JTextArea console;
-
+	private MainWindow		mainWindow;
+	private ConfigHandler	configHandler;
+	private LoginPanel		loginPanel;
+	private LoggedPanel		loggedPanel;
+	private AdvPanel		advPanel;
+	private GamePanel		gamePanel;
+	private String			login;
+	private char[]			password;
+	private Color			bgColor	= new Color(0, 139, 139);
+	private Logger			logger;
+	private JTextArea		console;
+	
 	/**
 	 * Presenter Constructor
 	 */
@@ -43,7 +43,7 @@ public class Presenter {
 		configHandler = new ConfigHandler(this);
 		configHandler.readConfigFile();
 	}
-
+	
 	/**
 	 * Adds reference to mainWindow and its components.
 	 * 
@@ -54,7 +54,7 @@ public class Presenter {
 		saveComponentsRefs();
 		configHandler.setConsole(console);
 	}
-
+	
 	/**
 	 * Saves references to objects in panels.
 	 */
@@ -65,7 +65,7 @@ public class Presenter {
 		this.advPanel = this.mainWindow.getRightPanel().getAdvPanel();
 		this.gamePanel = this.mainWindow.getRightPanel().getGamePanel();
 	}
-
+	
 	public synchronized void pressedLoginButton(String loginT, char[] passwordT) {
 		this.login = loginT;
 		this.password = passwordT;
@@ -78,7 +78,7 @@ public class Presenter {
 				boolean success = configHandler.login(login, password);
 				return success;
 			}
-
+			
 			@Override
 			protected void done() {
 				try {
@@ -94,27 +94,28 @@ public class Presenter {
 						console.append("Wystapi³ problem z logowaniem.\n");
 						logger.info("Wystapi³ problem z logowaniem.\n");
 					}
-				} catch (InterruptedException e) {
+				}
+				catch (InterruptedException e) {
 					logger.log(Level.SEVERE, e.toString(), e);
-				} catch (ExecutionException e) {
+				}
+				catch (ExecutionException e) {
 					logger.log(Level.SEVERE, e.toString(), e);
 				}
 			}
 		};
 		worker.execute();
 	}
-
+	
 	public synchronized void pressedRegisterButton() {
 		SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
 			@Override
 			protected Void doInBackground() throws Exception {
 				console.append("Otwieranie przegladarki ... \n");
 				gamePanel.getProgressBar().setIndeterminate(true);
-				ConfigHandler
-						.openWebpage("http://grm-dev.pl/bol/web/rejestracja.php");
+				ConfigHandler.openWebpage("http://grm-dev.pl/bol/web/rejestracja.php");
 				return null;
 			}
-
+			
 			@Override
 			protected void done() {
 				console.append("Otwarto Przegladarke. \n");
@@ -123,7 +124,7 @@ public class Presenter {
 		};
 		worker.execute();
 	}
-
+	
 	public synchronized void pressedSettingsButton() {
 		SwingWorker<Boolean, Void> worker = new SwingWorker<Boolean, Void>() {
 			@Override
@@ -133,7 +134,7 @@ public class Presenter {
 				setDBox.setModal(true);
 				return null;
 			}
-
+			
 			@Override
 			protected void done() {
 				console.append("Opcje\n");
@@ -141,18 +142,19 @@ public class Presenter {
 		};
 		worker.execute();
 	}
-
+	
 	public synchronized void pressedStartButton() {
 		SwingWorker<Boolean, Void> worker = new SwingWorker<Boolean, Void>() {
 			@Override
 			protected Boolean doInBackground() throws Exception {
 				FileOperation fileOp = configHandler.getFileOp();
+				
 				if (configHandler.checkLastVersion()) {
-
+					
 				}
-				return null;
+				return false;
 			}
-
+			
 			@Override
 			protected void done() {
 				console.append("Start game\n");
@@ -160,7 +162,7 @@ public class Presenter {
 		};
 		worker.execute();
 	}
-
+	
 	public void pressedLogoutButton() {
 		SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
 			@Override
@@ -174,19 +176,19 @@ public class Presenter {
 		};
 		worker.execute();
 	}
-
+	
 	public MainWindow getMainWindow() {
 		return mainWindow;
 	}
-
+	
 	public Color getBgColor() {
 		return this.bgColor;
 	}
-
+	
 	public void setLogger(Logger logger) {
 		this.logger = logger;
 	}
-
+	
 	public JTextArea getConsole() {
 		return this.console;
 	}
