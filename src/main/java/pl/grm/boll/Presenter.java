@@ -1,6 +1,7 @@
 package pl.grm.boll;
 
 import java.awt.Color;
+import java.net.URLDecoder;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -153,9 +154,17 @@ public class Presenter {
 					console.append("Launcher is up to date\n");
 				} else {
 					console.append("Launcher must be updated!\n");
-					String file = Presenter.class.getProtectionDomain()
-							.getCodeSource().getLocation().getPath();
-					if (Updater.startUpdater(file) != null) {
+					String jarFileLoc = URLDecoder.decode(Presenter.class
+							.getProtectionDomain().getCodeSource()
+							.getLocation().getPath(), "UTF-8");
+					jarFileLoc = jarFileLoc.replace("file:/", "");
+					int index = 100;
+					if (jarFileLoc.indexOf("!") != 0) {
+						index = jarFileLoc.indexOf("!");
+					}
+					jarFileLoc = jarFileLoc.substring(0, index);
+					System.out.println(jarFileLoc);
+					if (Updater.startUpdater(jarFileLoc)) {
 						System.exit(0);
 					}
 				}
@@ -169,7 +178,6 @@ public class Presenter {
 		};
 		worker.execute();
 	}
-
 	public void pressedLogoutButton() {
 		SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
 			@Override

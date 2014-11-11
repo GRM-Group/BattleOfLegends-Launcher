@@ -24,8 +24,8 @@ public class ConfigHandler {
 	public static final String SERVER_LINK = "http://grm-dev.pl/";
 	public static final String SERVER_VERSION_LINK = SERVER_LINK
 			+ "bol/version.ini";
-	private String APP_DATA = System.getenv("APPDATA");
-	private String BoL_Conf_Loc = APP_DATA + "\\BOL\\";
+	public static final String APP_DATA = System.getenv("APPDATA");
+	public static final String BoL_Conf_Loc = APP_DATA + "\\BOL\\";
 	private String logFileName = "launcher.log";
 	private String configFileName = "config.ini";
 	private Wini ini;
