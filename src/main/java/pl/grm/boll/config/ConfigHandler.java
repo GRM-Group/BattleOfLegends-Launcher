@@ -3,8 +3,8 @@ package pl.grm.boll.config;
 import java.awt.Desktop;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
@@ -42,9 +42,28 @@ public class ConfigHandler {
 		presenter.setLogger(logger);
 	}
 	
+	public String checkVersion(String site, String x, String y) {
+		Ini sIni = new Ini();
+		URL url;
+		try {
+			url = new URL(site);
+			sIni.load(url);
+		}
+		catch (MalformedURLException e) {
+			logger.log(Level.SEVERE, e.toString(), e);
+		}
+		catch (InvalidFileFormatException e) {
+			logger.log(Level.SEVERE, e.toString(), e);
+		}
+		catch (IOException e) {
+			logger.log(Level.SEVERE, e.toString(), e);
+		}
+		
+		return sIni.get(x, y);
+	}
+	
 	public boolean checkLastVersion() {
 		Ini sIni = new Ini();
-		FileReader fr;
 		VersionComparator cmp = new VersionComparator();
 		try {
 			URL url = new URL("http://grm-dev.pl/bol/version.ini");
@@ -63,16 +82,13 @@ public class ConfigHandler {
 			return true;
 		}
 		catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.log(Level.SEVERE, e.toString(), e);
 		}
 		catch (InvalidFileFormatException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.log(Level.SEVERE, e.toString(), e);
 		}
 		catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.log(Level.SEVERE, e.toString(), e);
 		}
 		return false;
 	}
@@ -148,5 +164,9 @@ public class ConfigHandler {
 	
 	public FileOperation getFileOp() {
 		return fileOp;
+	}
+	
+	public Wini getIni() {
+		return ini;
 	}
 }

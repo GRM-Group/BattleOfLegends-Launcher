@@ -192,4 +192,8 @@ public class Presenter {
 	public JTextArea getConsole() {
 		return this.console;
 	}
+
+	public ConfigHandler getConfigHandler() {
+		return configHandler;
+	}
 }
