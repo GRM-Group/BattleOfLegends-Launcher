@@ -49,8 +49,10 @@ public class GamePanel extends JPanel {
 			}
 		});
 		add(settingsButton);
-		patchLabel = new JLabel(presenterT.getConfigHandler().checkVersion(
-				"http://grm-dev.pl/bol/version.ini", "Game", "last_version"));
+		patchLabel = new JLabel("New version: "
+				+ presenterT.getConfigHandler().checkVersion(
+						"http://grm-dev.pl/bol/version.ini", "Game",
+						"last_version"));
 		add(patchLabel);
 		updateProgressBar = new JProgressBar();
 		updateProgressBar.setStringPainted(true);
