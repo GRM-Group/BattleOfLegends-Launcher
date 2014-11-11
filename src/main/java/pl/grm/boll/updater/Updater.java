@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.ProcessBuilder.Redirect;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
@@ -20,6 +21,8 @@ public class Updater {
 	private static String APP_DATA = System.getenv("APPDATA");
 	private static String BoL_Conf_Loc = APP_DATA + "\\BOL\\";
 	private static String version = "0.0.0";
+	private static URI uri;
+	private static String file;
 
 	public static void main(String[] args) {
 		checkoutServerVersion();
@@ -30,7 +33,8 @@ public class Updater {
 		runLauncher();
 	}
 
-	public static Process startUpdater() {
+	public static Process startUpdater(String file) {
+		Updater.file = file;
 		String separator = System.getProperty("file.separator");
 		String classpath = System.getProperty("java.class.path");
 		String path = System.getProperty("java.home") + separator + "bin"
@@ -75,15 +79,15 @@ public class Updater {
 			e.printStackTrace();
 		}
 
-		// version = sIni.get("version", "Launcher");
+		version = sIni.get("Launcher", "last_version");
+		System.out.println(version);
 	}
 
 	private static void downloadNewVersion() {
-		String fileName = "BattleOfLegends-Launcher-" + version
-				+ "-SNAPSHOT.jar";
+		String fileName = "BoL-Launcher-" + version + "-SNAPSHOT.jar";
 		try {
 			URL website = new URL(ConfigHandler.SERVER_LINK
-					+ "jenkins/artifacts/build/libs/" + fileName);
+					+ "jenkins/artifacts/" + fileName);
 			ReadableByteChannel rbc = Channels.newChannel(website.openStream());
 			FileOutputStream fos;
 			fos = new FileOutputStream(fileName);
@@ -100,8 +104,22 @@ public class Updater {
 	}
 
 	private static void changeOldName() {
-		// TODO Auto-generated method stub
+		System.out.println(file);
+		String fileName = "";
+		File file = new File(fileName + ".jar");
+		File file2 = new File(fileName + "_old.jar");
+		if (file2.exists())
+			try {
+				throw new java.io.IOException("file exists");
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 
+		boolean success = file.renameTo(file2);
+		if (!success) {
+
+		}
 	}
 
 	private static void changeNewName() {

@@ -153,7 +153,9 @@ public class Presenter {
 					console.append("Launcher is up to date\n");
 				} else {
 					console.append("Launcher must be updated!\n");
-					if (Updater.startUpdater() != null) {
+					String file = Presenter.class.getProtectionDomain()
+							.getCodeSource().getLocation().getPath();
+					if (Updater.startUpdater(file) != null) {
 						System.exit(0);
 					}
 				}
