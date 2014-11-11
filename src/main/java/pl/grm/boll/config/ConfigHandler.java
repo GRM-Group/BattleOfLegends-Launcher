@@ -21,19 +21,22 @@ import pl.grm.boll.Presenter;
 import pl.grm.boll.rmi.ConnHandler;
 
 public class ConfigHandler {
-	private String			APP_DATA		= System.getenv("APPDATA");
-	private String			BoL_Conf_Loc	= APP_DATA + "\\BOL\\";
-	private String			logFileName		= "launcher.log";
-	private String			configFileName	= "config.ini";
-	private Wini			ini;
-	private File			file;
-	private Presenter		presenter;
-	private ConnHandler		connHandler;
-	private FileHandler		fHandler;
-	private Logger			logger;
-	private JTextArea		console;
-	private FileOperation	fileOp;
-	
+	public static final String SERVER_LINK = "http://grm-dev.pl/";
+	public static final String SERVER_VERSION_LINK = SERVER_LINK
+			+ "bol/version.ini";
+	private String APP_DATA = System.getenv("APPDATA");
+	private String BoL_Conf_Loc = APP_DATA + "\\BOL\\";
+	private String logFileName = "launcher.log";
+	private String configFileName = "config.ini";
+	private Wini ini;
+	private File file;
+	private Presenter presenter;
+	private ConnHandler connHandler;
+	private FileHandler fHandler;
+	private Logger logger;
+	private JTextArea console;
+	private FileOperation fileOp;
+
 	public ConfigHandler(Presenter presenter) {
 		this.presenter = presenter;
 		setupLogger();
@@ -41,75 +44,66 @@ public class ConfigHandler {
 		fileOp = new FileOperation(logger);
 		presenter.setLogger(logger);
 	}
-	
-	public String checkVersion(String site, String x, String y) {
+
+	public String getServerConfig(String site, String x, String y) {
 		Ini sIni = new Ini();
 		URL url;
 		try {
 			url = new URL(site);
 			sIni.load(url);
-		}
-		catch (MalformedURLException e) {
+		} catch (MalformedURLException e) {
+			logger.log(Level.SEVERE, e.toString(), e);
+		} catch (InvalidFileFormatException e) {
+			logger.log(Level.SEVERE, e.toString(), e);
+		} catch (IOException e) {
 			logger.log(Level.SEVERE, e.toString(), e);
 		}
-		catch (InvalidFileFormatException e) {
-			logger.log(Level.SEVERE, e.toString(), e);
-		}
-		catch (IOException e) {
-			logger.log(Level.SEVERE, e.toString(), e);
-		}
-		
+
 		return sIni.get(x, y);
 	}
-	
-	public boolean checkLastVersion() {
+
+	public boolean isUpToDate() {
 		Ini sIni = new Ini();
 		VersionComparator cmp = new VersionComparator();
 		try {
-			URL url = new URL("http://grm-dev.pl/bol/version.ini");
+			URL url = new URL(SERVER_VERSION_LINK);
 			sIni.load(url);
 			String sVersion = sIni.get("Launcher", "last_version");
 			String lVersion = ini.get("Launcher", "version");
-			
+
 			int result = cmp.compare(sVersion, lVersion);
-			String lol = "==";
-			if (result < 0) {
-				lol = "<";
+			if (result <= 0) {
+				return true;
 			} else if (result > 0) {
-				lol = ">";
+				return false;
 			}
-			System.out.printf("%s %s %s \n", sVersion, lol, lVersion);
-			return true;
-		}
-		catch (FileNotFoundException e) {
+
+		} catch (FileNotFoundException e) {
 			logger.log(Level.SEVERE, e.toString(), e);
-		}
-		catch (InvalidFileFormatException e) {
+		} catch (InvalidFileFormatException e) {
 			logger.log(Level.SEVERE, e.toString(), e);
-		}
-		catch (IOException e) {
+		} catch (IOException e) {
 			logger.log(Level.SEVERE, e.toString(), e);
 		}
 		return false;
 	}
-	
+
 	private void setupLogger() {
 		logger = Logger.getLogger(ConfigHandler.class.getName());
 		try {
-			fHandler = new FileHandler(BoL_Conf_Loc + logFileName, 1048476, 1, true);
+			fHandler = new FileHandler(BoL_Conf_Loc + logFileName, 1048476, 1,
+					true);
 			logger.addHandler(fHandler);
 			SimpleFormatter formatter = new SimpleFormatter();
 			fHandler.setFormatter(formatter);
-		}
-		catch (SecurityException e) {
+		} catch (SecurityException e) {
 			logger.log(Level.SEVERE, e.toString(), e);
-		}
-		catch (IOException e) {
+		} catch (IOException e) {
 			logger.log(Level.SEVERE, e.toString(), e);
 		}
 		logger.info("Config&Log Location: " + BoL_Conf_Loc);
 	}
-	
+
 	public void readConfigFile() {
 		File dir = new File(BoL_Conf_Loc);
 		if (!dir.exists()) {
@@ -122,50 +116,47 @@ public class ConfigHandler {
 			createIniFile();
 		}
 	}
-	
+
 	private void readIni() {
 		try {
 			ini = new Wini(file);
-		}
-		catch (InvalidFileFormatException e) {
+		} catch (InvalidFileFormatException e) {
 			logger.log(Level.SEVERE, e.toString(), e);
-		}
-		catch (IOException e) {
+		} catch (IOException e) {
 			logger.log(Level.SEVERE, e.toString(), e);
 		}
 	}
-	
+
 	private void createIniFile() {
 		try {
 			file.createNewFile();
-		}
-		catch (IOException e) {
+		} catch (IOException e) {
 			logger.log(Level.SEVERE, e.toString(), e);
 		}
 	}
-	
+
 	public static void openWebpage(String urlString) {
 		try {
 			Desktop.getDesktop().browse(new URL(urlString).toURI());
-		}
-		catch (Exception e) {
-			
+		} catch (Exception e) {
+
 		}
 	}
-	
+
 	public Boolean login(String login, char[] password) {
-		return connHandler.login(login, Hashing.hash(new String(password), "MD5"));
+		return connHandler.login(login,
+				Hashing.hash(new String(password), "MD5"));
 	}
-	
+
 	public void setConsole(JTextArea console) {
 		this.console = console;
 		connHandler.setConsole(console);
 	}
-	
+
 	public FileOperation getFileOp() {
 		return fileOp;
 	}
-	
+
 	public Wini getIni() {
 		return ini;
 	}

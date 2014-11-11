@@ -97,7 +97,7 @@ public class ConnHandler {
 			if (correct) {
 				return true;
 			}
-			String str = "B³edne has³o. \n";
+			String str = "Bledne haslo. \n";
 			logger.info(str);
 			console.append(str);
 		}

@@ -50,7 +50,7 @@ public class GamePanel extends JPanel {
 		});
 		add(settingsButton);
 		patchLabel = new JLabel("New version: "
-				+ presenterT.getConfigHandler().checkVersion(
+				+ presenterT.getConfigHandler().getServerConfig(
 						"http://grm-dev.pl/bol/version.ini", "Game",
 						"last_version"));
 		add(patchLabel);
