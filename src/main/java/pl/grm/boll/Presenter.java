@@ -1,11 +1,11 @@
 package pl.grm.boll;
 
 import java.awt.Color;
-import java.net.URLDecoder;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.swing.JProgressBar;
 import javax.swing.JTextArea;
 import javax.swing.SwingWorker;
 
@@ -148,24 +148,27 @@ public class Presenter {
 		SwingWorker<Boolean, Void> worker = new SwingWorker<Boolean, Void>() {
 			@Override
 			protected Boolean doInBackground() throws Exception {
+				gamePanel.getLaunchButton().setEnabled(false);
+				JProgressBar progressBar = gamePanel.getProgressBar();
 				FileOperation fileOp = configHandler.getFileOp();
-
+				progressBar.setValue(5);
 				if (configHandler.isUpToDate()) {
 					console.append("Launcher is up to date\n");
+					progressBar.setValue(20);
 				} else {
+					progressBar.setValue(7);
 					console.append("Launcher must be updated!\n");
-					String jarFileLoc = URLDecoder.decode(Presenter.class
-							.getProtectionDomain().getCodeSource()
-							.getLocation().getPath(), "UTF-8");
-					jarFileLoc = jarFileLoc.replace("file:/", "");
-					int index = 100;
-					if (jarFileLoc.indexOf("!") != 0) {
-						index = jarFileLoc.indexOf("!");
-					}
-					jarFileLoc = jarFileLoc.substring(0, index);
-					System.out.println(jarFileLoc);
-					if (Updater.startUpdater(jarFileLoc)) {
-						System.exit(0);
+					String jarFileLoc = fileOp.getCurrentJar();
+					progressBar.setStringPainted(true);
+					progressBar.setToolTipText("Updating launcher");
+					progressBar.setString("Updating launcher");
+					progressBar.setValue(9);
+					if (Updater.startUpdater(jarFileLoc, progressBar)) {
+						progressBar.setToolTipText("Restarting launcher");
+						progressBar.setString("Restarting launcher");
+						progressBar.setValue(100);
+						Thread.sleep(2000L);
+						return true;
 					}
 				}
 				return false;
@@ -174,6 +177,19 @@ public class Presenter {
 			@Override
 			protected void done() {
 				console.append("Start game\n");
+				try {
+					if (super.get()) {
+						System.exit(0);
+					}
+				} catch (InterruptedException e) {
+					logger.log(Level.SEVERE, e.toString(), e);
+				} catch (ExecutionException e) {
+					logger.log(Level.SEVERE, e.toString(), e);
+				}
+				gamePanel.getLaunchButton().setEnabled(true);
+				JProgressBar progressBar = gamePanel.getProgressBar();
+				progressBar.setValue(0);
+				progressBar.setStringPainted(false);
 			}
 		};
 		worker.execute();
@@ -211,4 +227,5 @@ public class Presenter {
 	public ConfigHandler getConfigHandler() {
 		return configHandler;
 	}
+
 }
