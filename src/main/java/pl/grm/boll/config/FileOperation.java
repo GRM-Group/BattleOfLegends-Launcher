@@ -1,22 +1,23 @@
 package pl.grm.boll.config;
 
 import java.io.UnsupportedEncodingException;
+import java.lang.management.ManagementFactory;
 import java.net.URLDecoder;
 import java.util.logging.Logger;
 
 import pl.grm.boll.Presenter;
 
 public class FileOperation {
-	private Logger logger;
-
+	private static Logger	logger;
+	
 	public FileOperation(Logger logger) {
-		this.logger = logger;
+		FileOperation.logger = logger;
 	}
-
-	public String getCurrentJar() throws UnsupportedEncodingException {
+	
+	public static String getCurrentJar() throws UnsupportedEncodingException {
 		String jarFileLoc = "";
-		jarFileLoc = URLDecoder.decode(Presenter.class.getProtectionDomain()
-				.getCodeSource().getLocation().getPath(), "UTF-8");
+		jarFileLoc = URLDecoder.decode(Presenter.class.getProtectionDomain().getCodeSource()
+				.getLocation().getPath(), "UTF-8");
 		jarFileLoc = jarFileLoc.replace("file:/", "");
 		int index = 100;
 		if (jarFileLoc.contains("!")) {
@@ -30,5 +31,17 @@ public class FileOperation {
 			}
 		}
 		return jarFileLoc;
+	}
+	
+	public static String getProcessId(final String fallback) {
+		final String jvmName = ManagementFactory.getRuntimeMXBean().getName();
+		final int index = jvmName.indexOf('@');
+		
+		if (index < 1) { return fallback; }
+		try {
+			return Long.toString(Long.parseLong(jvmName.substring(0, index)));
+		}
+		catch (NumberFormatException e) {}
+		return fallback;
 	}
 }
