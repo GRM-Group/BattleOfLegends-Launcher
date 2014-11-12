@@ -16,6 +16,7 @@ import org.ini4j.InvalidFileFormatException;
 import org.ini4j.Wini;
 
 import pl.grm.boll.Presenter;
+import pl.grm.boll.lib.FileOperation;
 import pl.grm.boll.rmi.ConnHandler;
 
 public class ConfigHandler {
@@ -31,12 +32,16 @@ public class ConfigHandler {
 	private FileHandler			fHandler;
 	private Logger				logger;
 	private JTextArea			console;
-	private FileOperation		fileOp;
 	
 	public ConfigHandler(Presenter presenter) {
 		this.presenter = presenter;
-		fileOp = new FileOperation();
-		logger = fileOp.setupLauncherLogger(fHandler);
+		try {
+			logger = FileOperation.setupLauncherLogger(fHandler);
+		}
+		catch (ClassNotFoundException | IllegalArgumentException | IllegalAccessException
+				| NoSuchFieldException e) {
+			e.printStackTrace();
+		}
 		connHandler = new ConnHandler(logger);
 		presenter.setLogger(logger);
 	}
@@ -102,10 +107,6 @@ public class ConfigHandler {
 	public void setConsole(JTextArea console) {
 		this.console = console;
 		connHandler.setConsole(console);
-	}
-	
-	public FileOperation getFileOp() {
-		return fileOp;
 	}
 	
 	public ConnHandler getConnHandler() {
