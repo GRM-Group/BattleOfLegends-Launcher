@@ -83,7 +83,7 @@ public class Presenter {
 				return;
 			}
 		}
-		console.append("Logowanie ... \n");
+		console.append("Loging in ...\n");
 		SwingWorker<Boolean, Void> worker = new SwingWorker<Boolean, Void>() {
 			@Override
 			protected Boolean doInBackground() throws Exception {
@@ -170,7 +170,7 @@ public class Presenter {
 					progressBar.setValue(7);
 					console.append("Launcher must be updated!\n");
 					int confirmed = JOptionPane.showConfirmDialog(mainWindow,
-							"Are you sure you want to exit the program?",
+							"Are you sure you want to update the launcher?",
 							"Exit Program Message Box",
 							JOptionPane.YES_NO_OPTION);
 					if (confirmed == JOptionPane.YES_OPTION) {
@@ -184,7 +184,6 @@ public class Presenter {
 							progressBar.setToolTipText("Restarting launcher");
 							progressBar.setString("Restarting launcher");
 							progressBar.setValue(100);
-							Thread.sleep(2000L);
 							return true;
 						}
 						console.append("Launcher update failed!\n");
@@ -199,6 +198,7 @@ public class Presenter {
 			protected void done() {
 				try {
 					if (super.get()) {
+						Thread.sleep(2000L);
 						System.exit(0);
 					}
 				} catch (InterruptedException e) {
