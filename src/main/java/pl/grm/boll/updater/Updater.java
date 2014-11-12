@@ -54,13 +54,16 @@ public class Updater {
 		catch (InterruptedException e) {
 			logger.log(Level.SEVERE, e.toString(), e);
 		}
-		
 		checkoutServerVersion();
 		downloadNewLauncher();
 		madeBackup();
-		moveNewLauncherFromTemp();
-		deleteBackupFile();
-		runLauncher();
+		if (moveNewLauncherFromTemp()) {
+			updateConfig();
+			deleteBackupFile();
+			runLauncher();
+		} else {
+			restoreBackup();
+		}
 	}
 	
 	/**
@@ -247,10 +250,26 @@ public class Updater {
 		}
 	}
 	
+	private static void restoreBackup() {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	/**
+	 * delete (with '_old') file
+	 */
+	private static void deleteBackupFile() {
+		String fileNameC = jarFileAbsPath.substring(0, jarFileAbsPath.length() - 4);
+		File file = new File(fileNameC + "_old.jar");
+		file.delete();
+	}
+	
 	/**
 	 * replace old Launcher with new one
+	 * 
+	 * @return
 	 */
-	private static void moveNewLauncherFromTemp() {
+	private static boolean moveNewLauncherFromTemp() {
 		InputStream inStream = null;
 		OutputStream outStream = null;
 		try {
@@ -269,19 +288,17 @@ public class Updater {
 			outStream.close();
 			fromFile.delete();
 			logger.info("Launcher updated successfully!");
+			return true;
 		}
 		catch (IOException e) {
 			logger.log(Level.SEVERE, e.toString(), e);
 		}
+		return false;
 	}
 	
-	/**
-	 * delete (with '_old') file
-	 */
-	private static void deleteBackupFile() {
-		String fileNameC = jarFileAbsPath.substring(0, jarFileAbsPath.length() - 4);
-		File file = new File(fileNameC + "_old.jar");
-		file.delete();
+	private static void updateConfig() {
+		// TODO Auto-generated method stub
+		
 	}
 	
 	/**

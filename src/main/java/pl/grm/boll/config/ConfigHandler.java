@@ -1,7 +1,6 @@
 package pl.grm.boll.config;
 
 import java.awt.Desktop;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -9,7 +8,6 @@ import java.net.URL;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.logging.SimpleFormatter;
 
 import javax.swing.JTextArea;
 
@@ -25,10 +23,9 @@ public class ConfigHandler {
 	public static final String	SERVER_VERSION_LINK	= SERVER_LINK + "bol/version.ini";
 	public static final String	APP_DATA			= System.getenv("APPDATA");
 	public static final String	BoL_Conf_Loc		= APP_DATA + "\\BOL\\";
-	private String				logFileName			= "launcher.log";
-	private String				configFileName		= "config.ini";
+	public static final String	logFileName			= "launcher.log";
+	public static final String	configFileName		= "config.ini";
 	private Wini				ini;
-	private File				file;
 	private Presenter			presenter;
 	private ConnHandler			connHandler;
 	private FileHandler			fHandler;
@@ -38,9 +35,9 @@ public class ConfigHandler {
 	
 	public ConfigHandler(Presenter presenter) {
 		this.presenter = presenter;
-		setupLogger();
+		fileOp = new FileOperation();
+		logger = fileOp.setupLauncherLogger(fHandler);
 		connHandler = new ConnHandler(logger);
-		fileOp = new FileOperation(logger);
 		presenter.setLogger(logger);
 	}
 	
@@ -89,57 +86,6 @@ public class ConfigHandler {
 		return false;
 	}
 	
-	private void setupLogger() {
-		logger = Logger.getLogger(ConfigHandler.class.getName());
-		try {
-			fHandler = new FileHandler(BoL_Conf_Loc + logFileName, 1048476, 1, true);
-			logger.addHandler(fHandler);
-			SimpleFormatter formatter = new SimpleFormatter();
-			fHandler.setFormatter(formatter);
-		}
-		catch (SecurityException e) {
-			logger.log(Level.SEVERE, e.toString(), e);
-		}
-		catch (IOException e) {
-			logger.log(Level.SEVERE, e.toString(), e);
-		}
-		logger.info("Config&Log Location: " + BoL_Conf_Loc);
-	}
-	
-	public void readConfigFile() {
-		File dir = new File(BoL_Conf_Loc);
-		if (!dir.exists()) {
-			dir.mkdir();
-		}
-		file = new File(BoL_Conf_Loc + configFileName);
-		if (file.exists()) {
-			readIni();
-		} else {
-			createIniFile();
-		}
-	}
-	
-	private void readIni() {
-		try {
-			ini = new Wini(file);
-		}
-		catch (InvalidFileFormatException e) {
-			logger.log(Level.SEVERE, e.toString(), e);
-		}
-		catch (IOException e) {
-			logger.log(Level.SEVERE, e.toString(), e);
-		}
-	}
-	
-	private void createIniFile() {
-		try {
-			file.createNewFile();
-		}
-		catch (IOException e) {
-			logger.log(Level.SEVERE, e.toString(), e);
-		}
-	}
-	
 	public static void openWebpage(String urlString) {
 		try {
 			Desktop.getDesktop().browse(new URL(urlString).toURI());
@@ -162,7 +108,19 @@ public class ConfigHandler {
 		return fileOp;
 	}
 	
+	public ConnHandler getConnHandler() {
+		return this.connHandler;
+	}
+	
+	public Logger getLogger() {
+		return this.logger;
+	}
+	
 	public Wini getIni() {
 		return ini;
+	}
+	
+	public void setIni(Wini ini) {
+		this.ini = ini;
 	}
 }

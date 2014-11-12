@@ -42,7 +42,7 @@ public class Presenter {
 	 */
 	public Presenter() {
 		configHandler = new ConfigHandler(this);
-		configHandler.readConfigFile();
+		configHandler.setIni(configHandler.getFileOp().readConfigFile());
 	}
 	
 	/**

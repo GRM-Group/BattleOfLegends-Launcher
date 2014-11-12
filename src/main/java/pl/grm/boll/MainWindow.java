@@ -3,8 +3,11 @@ package pl.grm.boll;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
@@ -34,7 +37,7 @@ public class MainWindow extends JFrame {
 		catch (Exception e) {
 			e.printStackTrace();
 		}
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		setBounds(100, 100, 600, 600);
 		setTitle("Battle Of Legends Launcher");
 		contentPane = new JPanel();
@@ -49,6 +52,18 @@ public class MainWindow extends JFrame {
 		setMinimumSize(new Dimension(400, 400));
 		pack();
 		presenter.addWindow(this);
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				int confirmed = JOptionPane.showConfirmDialog(MainWindow.this,
+						"Are you sure you want to exit the program?", "Exit Program Message Box",
+						JOptionPane.YES_NO_OPTION);
+				if (confirmed == JOptionPane.YES_OPTION) {
+					presenter.getConfigHandler().getLogger().info("Launcher Closing ...");
+					dispose();
+				}
+			}
+		});
 	}
 	
 	/**
