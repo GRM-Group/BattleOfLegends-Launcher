@@ -277,6 +277,12 @@ public class Updater {
 				jarFileAbsPath.length() - 4);
 		File file = new File(fileNameC + "_old.jar");
 		file.delete();
+		try {
+			File file2 = new File(FileOperation.getCurrentJar());
+			file2.deleteOnExit();
+		} catch (UnsupportedEncodingException e) {
+			logger.log(Level.SEVERE, e.toString(), e);
+		}
 	}
 
 	/**
