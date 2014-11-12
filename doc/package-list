@@ -1,3 +1,7 @@
 pl.grm.boll
-pl.grm.boll.components
+pl.grm.boll.boxes
 pl.grm.boll.config
+pl.grm.boll.panels
+pl.grm.boll.rmi
+pl.grm.boll.updater
+test.grm.boll
