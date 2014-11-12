@@ -10,6 +10,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
+import javax.swing.WindowConstants;
 import javax.swing.border.EmptyBorder;
 
 import pl.grm.boll.panels.LeftPanel;
@@ -21,10 +22,11 @@ import pl.grm.boll.panels.RightPanel;
  * Gets a reference to Presenter object.
  */
 public class MainWindow extends JFrame {
-	private JPanel		contentPane;
-	private RightPanel	rightPanel;
-	private LeftPanel	leftPanel;
-	private Presenter	presenter;
+	private static final long	serialVersionUID	= 1L;
+	private JPanel				contentPane;
+	private RightPanel			rightPanel;
+	private LeftPanel			leftPanel;
+	private Presenter			presenter;
 	
 	/**
 	 * Create the frame.
@@ -37,7 +39,7 @@ public class MainWindow extends JFrame {
 		catch (Exception e) {
 			e.printStackTrace();
 		}
-		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 		setBounds(100, 100, 600, 600);
 		setTitle("Battle Of Legends Launcher");
 		contentPane = new JPanel();
@@ -50,6 +52,7 @@ public class MainWindow extends JFrame {
 		rightPanel = new RightPanel(presenter);
 		contentPane.add(rightPanel);
 		setMinimumSize(new Dimension(400, 400));
+		setBackground(presenter.getBgColor());
 		pack();
 		presenter.addWindow(this);
 		addWindowListener(new WindowAdapter() {

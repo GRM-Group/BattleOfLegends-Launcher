@@ -5,6 +5,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.swing.JOptionPane;
 import javax.swing.JProgressBar;
 import javax.swing.JTextArea;
 import javax.swing.SwingWorker;
@@ -70,6 +71,13 @@ public class Presenter {
 	public synchronized void pressedLoginButton(String loginT, char[] passwordT) {
 		this.login = loginT;
 		this.password = passwordT;
+		if (!configHandler.getConnHandler().isConnected()) {
+			if (!configHandler.getConnHandler().reconnect(mainWindow)) {
+				console.append("Brak polaczenia z serwerem ...\n");
+				logger.info("Brak polaczenia z serwerem ...");
+				return;
+			}
+		}
 		console.append("Logowanie ... \n");
 		SwingWorker<Boolean, Void> worker = new SwingWorker<Boolean, Void>() {
 			@Override
@@ -154,20 +162,30 @@ public class Presenter {
 				if (configHandler.isUpToDate()) {
 					console.append("Launcher is up to date\n");
 					progressBar.setValue(20);
+					console.append("Start game\n");
 				} else {
 					progressBar.setValue(7);
 					console.append("Launcher must be updated!\n");
-					
-					progressBar.setStringPainted(true);
-					progressBar.setToolTipText("Updating launcher");
-					progressBar.setString("Updating launcher");
-					progressBar.setValue(9);
-					if (Updater.startUpdater(progressBar)) {
-						progressBar.setToolTipText("Restarting launcher");
-						progressBar.setString("Restarting launcher");
-						progressBar.setValue(100);
-						Thread.sleep(2000L);
-						return true;
+					int confirmed = JOptionPane.showConfirmDialog(mainWindow,
+							"Are you sure you want to exit the program?",
+							"Exit Program Message Box", JOptionPane.YES_NO_OPTION);
+					if (confirmed == JOptionPane.YES_OPTION) {
+						logger.info("Launcher Updating ...");
+						console.append("Launcher Updating ...\n");
+						progressBar.setStringPainted(true);
+						progressBar.setToolTipText("Updating launcher");
+						progressBar.setString("Updating launcher");
+						progressBar.setValue(9);
+						if (Updater.startUpdater(progressBar)) {
+							progressBar.setToolTipText("Restarting launcher");
+							progressBar.setString("Restarting launcher");
+							progressBar.setValue(100);
+							Thread.sleep(2000L);
+							return true;
+						}
+						console.append("Launcher Update failed ...\n");
+					} else {
+						console.append("Launcher Update cancelled ...\n");
 					}
 				}
 				return false;
@@ -175,7 +193,6 @@ public class Presenter {
 			
 			@Override
 			protected void done() {
-				console.append("Start game\n");
 				try {
 					if (super.get()) {
 						System.exit(0);
@@ -229,5 +246,4 @@ public class Presenter {
 	public ConfigHandler getConfigHandler() {
 		return configHandler;
 	}
-	
 }
