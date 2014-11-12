@@ -59,10 +59,15 @@ public class MainWindow extends JFrame {
 			@Override
 			public void windowClosing(WindowEvent e) {
 				int confirmed = JOptionPane.showConfirmDialog(MainWindow.this,
-						"Are you sure you want to exit the program?", "Exit Program Message Box",
-						JOptionPane.YES_NO_OPTION);
+						"Are you sure you want to exit the program?",
+						"Exit Program Message Box", JOptionPane.YES_NO_OPTION);
 				if (confirmed == JOptionPane.YES_OPTION) {
+					setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 					presenter.getConfigHandler().getLogger().info("Launcher Closing ...");
+					try {
+						Thread.sleep(1000L);
+					}
+					catch (InterruptedException e1) {}
 					dispose();
 				}
 			}

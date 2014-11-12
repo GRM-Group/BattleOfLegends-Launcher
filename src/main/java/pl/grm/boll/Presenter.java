@@ -55,6 +55,11 @@ public class Presenter {
 		this.mainWindow = mainWindow;
 		saveComponentsRefs();
 		configHandler.setConsole(console);
+		if (configHandler.getConnHandler().isConnected()) {
+			console.append("Jestes Online");
+		} else {
+			console.append("Jestes Offline");
+		}
 	}
 	
 	/**
