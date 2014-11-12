@@ -35,9 +35,11 @@ public class ConnHandler {
 				logger.log(Level.SEVERE, e.toString(), e);
 			}
 			catch (RemoteException e) {
-				int confirmed = JOptionPane.showConfirmDialog(null,
+				Object[] opts = {"Reconnect", "Stay Ofline"};
+				int confirmed = JOptionPane.showOptionDialog(null,
 						"Connection failed.\nWant to try to connect again?",
-						"Reconnect Message Box", JOptionPane.YES_NO_OPTION);
+						"Reconnect Message Box", JOptionPane.YES_NO_OPTION,
+						JOptionPane.WARNING_MESSAGE, null, opts, opts[0]);
 				if (confirmed == JOptionPane.YES_OPTION) {
 					logger.info("Trying to connect ...");
 					redo = true;
@@ -59,7 +61,8 @@ public class ConnHandler {
 	 * @throws NotBoundException
 	 * @throws AccessException
 	 */
-	private static LauncherDB connect() throws RemoteException, NotBoundException, AccessException {
+	private static LauncherDB connect() throws RemoteException, NotBoundException,
+			AccessException {
 		Registry registry = LocateRegistry.getRegistry("localhost", 1234);
 		LauncherDB dbHandler = (LauncherDB) registry.lookup("dBConfBindHandler");
 		return dbHandler;
@@ -124,7 +127,8 @@ public class ConnHandler {
 				console.append(str);
 			}
 		} else {
-			logger.log(Level.SEVERE, result.getException().toString(), result.getException());
+			logger.log(Level.SEVERE, result.getException().toString(),
+					result.getException());
 		}
 		return false;
 	}
