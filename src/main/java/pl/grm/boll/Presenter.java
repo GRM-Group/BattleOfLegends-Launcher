@@ -26,18 +26,18 @@ import pl.grm.boll.updater.Updater;
  * This presenter has also some kind of temp model.
  */
 public class Presenter {
-	private MainWindow		mainWindow;
-	private ConfigHandler	configHandler;
-	private LoginPanel		loginPanel;
-	private LoggedPanel		loggedPanel;
-	private AdvPanel		advPanel;
-	private GamePanel		gamePanel;
-	private String			login;
-	private char[]			password;
-	private Color			bgColor	= new Color(0, 139, 139);
-	private Logger			logger;
-	private JTextArea		console;
-	
+	private MainWindow mainWindow;
+	private ConfigHandler configHandler;
+	private LoginPanel loginPanel;
+	private LoggedPanel loggedPanel;
+	private AdvPanel advPanel;
+	private GamePanel gamePanel;
+	private String login;
+	private char[] password;
+	private Color bgColor = new Color(0, 139, 139);
+	private Logger logger;
+	private JTextArea console;
+
 	/**
 	 * Presenter Constructor
 	 */
@@ -45,7 +45,7 @@ public class Presenter {
 		configHandler = new ConfigHandler(this);
 		configHandler.setIni(configHandler.getFileOp().readConfigFile());
 	}
-	
+
 	/**
 	 * Adds reference to mainWindow and its components.
 	 * 
@@ -56,12 +56,12 @@ public class Presenter {
 		saveComponentsRefs();
 		configHandler.setConsole(console);
 		if (configHandler.getConnHandler().isConnected()) {
-			console.append("Jestes Online");
+			console.append("You are online\n");
 		} else {
-			console.append("Jestes Offline");
+			console.append("You are offline\n");
 		}
 	}
-	
+
 	/**
 	 * Saves references to objects in panels.
 	 */
@@ -72,14 +72,14 @@ public class Presenter {
 		this.advPanel = this.mainWindow.getRightPanel().getAdvPanel();
 		this.gamePanel = this.mainWindow.getRightPanel().getGamePanel();
 	}
-	
+
 	public synchronized void pressedLoginButton(String loginT, char[] passwordT) {
 		this.login = loginT;
 		this.password = passwordT;
 		if (!configHandler.getConnHandler().isConnected()) {
 			if (!configHandler.getConnHandler().reconnect(mainWindow)) {
-				console.append("Brak polaczenia z serwerem ...\n");
-				logger.info("Brak polaczenia z serwerem ...");
+				console.append("No connection to server!\n");
+				logger.info("No connection to server!\n");
 				return;
 			}
 		}
@@ -92,53 +92,51 @@ public class Presenter {
 				boolean success = configHandler.login(login, password);
 				return success;
 			}
-			
+
 			@Override
 			protected void done() {
 				try {
 					loginPanel.getLoginButton().setEnabled(true);
 					gamePanel.getProgressBar().setIndeterminate(false);
 					if (super.get()) {
-						console.append("Zalogowano pomyslnie\n");
-						logger.info("Zalogowano pomyslnie\n");
+						console.append("Logged successfully!\n");
+						logger.info("Logged successfully!\n");
 						loginPanel.setVisible(false);
 						loggedPanel.getLblLoggedAs().setText(login);
 						loggedPanel.setVisible(true);
 					} else {
-						console.append("Wystapil problem z logowaniem.\n");
-						logger.info("Wystapil problem z logowaniem.\n");
+						console.append("Problem with logging in!\n");
+						logger.info("Problem with logging in!\n");
 					}
-				}
-				catch (InterruptedException e) {
+				} catch (InterruptedException e) {
 					logger.log(Level.SEVERE, e.toString(), e);
-				}
-				catch (ExecutionException e) {
+				} catch (ExecutionException e) {
 					logger.log(Level.SEVERE, e.toString(), e);
 				}
 			}
 		};
 		worker.execute();
 	}
-	
+
 	public synchronized void pressedRegisterButton() {
 		SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
 			@Override
 			protected Void doInBackground() throws Exception {
-				console.append("Otwieranie przegladarki ... \n");
 				gamePanel.getProgressBar().setIndeterminate(true);
-				ConfigHandler.openWebpage("http://grm-dev.pl/bol/web/rejestracja.php");
+				ConfigHandler
+						.openWebpage("http://grm-dev.pl/bol/web/rejestracja.php");
 				return null;
 			}
-			
+
 			@Override
 			protected void done() {
-				console.append("Otwarto Przegladarke. \n");
+				console.append("Open register site!\n");
 				gamePanel.getProgressBar().setIndeterminate(false);
 			}
 		};
 		worker.execute();
 	}
-	
+
 	public synchronized void pressedSettingsButton() {
 		SwingWorker<Boolean, Void> worker = new SwingWorker<Boolean, Void>() {
 			@Override
@@ -148,15 +146,15 @@ public class Presenter {
 				setDBox.setModal(true);
 				return null;
 			}
-			
+
 			@Override
 			protected void done() {
-				console.append("Opcje\n");
+				console.append("Settings\n");
 			}
 		};
 		worker.execute();
 	}
-	
+
 	public synchronized void pressedStartButton() {
 		SwingWorker<Boolean, Void> worker = new SwingWorker<Boolean, Void>() {
 			@Override
@@ -173,7 +171,8 @@ public class Presenter {
 					console.append("Launcher must be updated!\n");
 					int confirmed = JOptionPane.showConfirmDialog(mainWindow,
 							"Are you sure you want to exit the program?",
-							"Exit Program Message Box", JOptionPane.YES_NO_OPTION);
+							"Exit Program Message Box",
+							JOptionPane.YES_NO_OPTION);
 					if (confirmed == JOptionPane.YES_OPTION) {
 						logger.info("Launcher Updating ...");
 						console.append("Launcher Updating ...\n");
@@ -188,25 +187,23 @@ public class Presenter {
 							Thread.sleep(2000L);
 							return true;
 						}
-						console.append("Launcher Update failed ...\n");
+						console.append("Launcher update failed!\n");
 					} else {
-						console.append("Launcher Update cancelled ...\n");
+						console.append("Launcher update cancelled!\n");
 					}
 				}
 				return false;
 			}
-			
+
 			@Override
 			protected void done() {
 				try {
 					if (super.get()) {
 						System.exit(0);
 					}
-				}
-				catch (InterruptedException e) {
+				} catch (InterruptedException e) {
 					logger.log(Level.SEVERE, e.toString(), e);
-				}
-				catch (ExecutionException e) {
+				} catch (ExecutionException e) {
 					logger.log(Level.SEVERE, e.toString(), e);
 				}
 				gamePanel.getLaunchButton().setEnabled(true);
@@ -217,37 +214,37 @@ public class Presenter {
 		};
 		worker.execute();
 	}
-	
+
 	public void pressedLogoutButton() {
 		SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
 			@Override
 			protected Void doInBackground() throws Exception {
 				loginPanel.setVisible(true);
 				loggedPanel.setVisible(false);
-				console.append("Wylogowano.\n");
-				logger.info("Wylogowano.\n");
+				console.append("Logout!\n");
+				logger.info("Logout!\n");
 				return null;
 			}
 		};
 		worker.execute();
 	}
-	
+
 	public MainWindow getMainWindow() {
 		return mainWindow;
 	}
-	
+
 	public Color getBgColor() {
 		return this.bgColor;
 	}
-	
+
 	public void setLogger(Logger logger) {
 		this.logger = logger;
 	}
-	
+
 	public JTextArea getConsole() {
 		return this.console;
 	}
-	
+
 	public ConfigHandler getConfigHandler() {
 		return configHandler;
 	}

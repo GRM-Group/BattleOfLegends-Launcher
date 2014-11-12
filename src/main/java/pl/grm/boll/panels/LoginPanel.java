@@ -17,16 +17,16 @@ import pl.grm.boll.Presenter;
  * Contains login/passwd fields and login button.
  */
 public class LoginPanel extends JPanel {
-	private JTextField		loginField;
-	private JPasswordField	passwordField;
-	private JButton			registerButton;
-	private JButton			loginButton;
-	private JCheckBox		autologinCheckBox;
-	private JCheckBox		rememberCheckBox;
-	private JLabel			hasloLabel;
-	private JLabel			loginLabel;
-	private Presenter		presenter;
-	
+	private JTextField loginField;
+	private JPasswordField passwordField;
+	private JButton registerButton;
+	private JButton loginButton;
+	private JCheckBox autologinCheckBox;
+	private JCheckBox rememberCheckBox;
+	private JLabel hasloLabel;
+	private JLabel loginLabel;
+	private Presenter presenter;
+
 	/**
 	 * Create the login panel.
 	 * 
@@ -40,11 +40,11 @@ public class LoginPanel extends JPanel {
 		loginField = new JTextField();
 		add(loginField);
 		loginField.setColumns(10);
-		hasloLabel = new JLabel("Has\u0142o:");
+		hasloLabel = new JLabel("Password:");
 		add(hasloLabel);
 		passwordField = new JPasswordField();
 		add(passwordField);
-		rememberCheckBox = new JCheckBox("Zapamitaj has\u0142o");
+		rememberCheckBox = new JCheckBox("Remember password");
 		add(rememberCheckBox);
 		autologinCheckBox = new JCheckBox("Auto login");
 		add(autologinCheckBox);
@@ -52,11 +52,12 @@ public class LoginPanel extends JPanel {
 		loginButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				presenter.pressedLoginButton(loginField.getText(), passwordField.getPassword());
+				presenter.pressedLoginButton(loginField.getText(),
+						passwordField.getPassword());
 			}
 		});
 		add(loginButton);
-		registerButton = new JButton("Rejestracja");
+		registerButton = new JButton("Register");
 		registerButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -66,42 +67,42 @@ public class LoginPanel extends JPanel {
 		add(registerButton);
 		setBackground(presenter.getBgColor());
 	}
-	
+
 	/**
 	 * @return {@link JTextField}
 	 */
 	public JTextField getLoginField() {
 		return loginField;
 	}
-	
+
 	/**
 	 * @return {@link JPasswordField}
 	 */
 	public JPasswordField getPasswordField() {
 		return passwordField;
 	}
-	
+
 	/**
 	 * @return {@link JButton}
 	 */
 	public JButton getRegisterButton() {
 		return registerButton;
 	}
-	
+
 	/**
 	 * @return {@link JButton}
 	 */
 	public JButton getLoginButton() {
 		return loginButton;
 	}
-	
+
 	/**
 	 * @return {@link JCheckBox}
 	 */
 	public JCheckBox getAutologinCheckBox() {
 		return autologinCheckBox;
 	}
-	
+
 	/**
 	 * @return {@link JCheckBox}
 	 */

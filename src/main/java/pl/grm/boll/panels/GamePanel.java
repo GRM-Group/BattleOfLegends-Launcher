@@ -34,14 +34,14 @@ public class GamePanel extends JPanel {
 	public GamePanel(Presenter presenterT) {
 		this.presenter = presenterT;
 		setLayout(new GridLayout(2, 4, 0, 0));
-		versioniLabel = new JLabel("Game version:");
+		versioniLabel = new JLabel("Game version");
 		add(versioniLabel);
 		versionLabel = new JLabel(presenterT.getConfigHandler().getIni()
 				.get("Game", "version"));
 		add(versionLabel);
 		label = new JLabel("");
 		add(label);
-		settingsButton = new JButton("Opcje");
+		settingsButton = new JButton("Settings");
 		settingsButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {

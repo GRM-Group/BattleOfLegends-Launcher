@@ -16,11 +16,11 @@ import pl.grm.boll.lib.LauncherDB;
 import pl.grm.boll.lib.Result;
 
 public class ConnHandler {
-	private LauncherDB	dbHandler;
-	private Logger		logger;
-	private JTextArea	console;
-	private boolean		connected	= false;
-	
+	private LauncherDB dbHandler;
+	private Logger logger;
+	private JTextArea console;
+	private boolean connected = false;
+
 	public ConnHandler(Logger logger) {
 		this.logger = logger;
 		boolean redo;
@@ -30,11 +30,9 @@ public class ConnHandler {
 				dbHandler = connect();
 				redo = false;
 				setConnected(true);
-			}
-			catch (AccessException e) {
+			} catch (AccessException e) {
 				logger.log(Level.SEVERE, e.toString(), e);
-			}
-			catch (RemoteException e) {
+			} catch (RemoteException e) {
 				Object[] opts = {"Reconnect", "Stay Ofline"};
 				int confirmed = JOptionPane.showOptionDialog(null,
 						"Connection failed.\nWant to try to connect again?",
@@ -45,14 +43,12 @@ public class ConnHandler {
 					redo = true;
 				}
 				logger.log(Level.SEVERE, e.toString(), e);
-			}
-			catch (NotBoundException e) {
+			} catch (NotBoundException e) {
 				logger.log(Level.SEVERE, e.toString(), e);
 			}
-		}
-		while (redo);
+		} while (redo);
 	}
-	
+
 	/**
 	 * Connects to server with dBControls.
 	 * 
@@ -61,13 +57,14 @@ public class ConnHandler {
 	 * @throws NotBoundException
 	 * @throws AccessException
 	 */
-	private static LauncherDB connect() throws RemoteException, NotBoundException,
-			AccessException {
+	private static LauncherDB connect() throws RemoteException,
+			NotBoundException, AccessException {
 		Registry registry = LocateRegistry.getRegistry("localhost", 1234);
-		LauncherDB dbHandler = (LauncherDB) registry.lookup("dBConfBindHandler");
+		LauncherDB dbHandler = (LauncherDB) registry
+				.lookup("dBConfBindHandler");
 		return dbHandler;
 	}
-	
+
 	/**
 	 * Tries to reconnect to Server.
 	 * 
@@ -84,11 +81,9 @@ public class ConnHandler {
 				redo = false;
 				setConnected(true);
 				return true;
-			}
-			catch (AccessException e) {
+			} catch (AccessException e) {
 				logger.log(Level.SEVERE, e.toString(), e);
-			}
-			catch (RemoteException e) {
+			} catch (RemoteException e) {
 				int confirmed = JOptionPane.showConfirmDialog(component,
 						"Connection lost.\nDo You want to try to reconnect?",
 						"Reconnect Message Box", JOptionPane.YES_NO_OPTION);
@@ -97,22 +92,19 @@ public class ConnHandler {
 					redo = true;
 				}
 				logger.log(Level.SEVERE, e.toString(), e);
-			}
-			catch (NotBoundException e) {
+			} catch (NotBoundException e) {
 				logger.log(Level.SEVERE, e.toString(), e);
 			}
-		}
-		while (redo);
+		} while (redo);
 		return false;
 	}
-	
+
 	private Boolean checkIfExists(String login) {
 		Result result = null;
 		String resultString;
 		try {
 			result = dbHandler.checkIfExists(login);
-		}
-		catch (RemoteException e) {
+		} catch (RemoteException e) {
 			logger.log(Level.SEVERE, e.toString(), e);
 			setConnected(false);
 			return false;
@@ -120,9 +112,11 @@ public class ConnHandler {
 		if (result.getException() == null) {
 			if (result.getResultString() != null) {
 				resultString = result.getResultString();
-				if (resultString.equals(login)) { return true; }
+				if (resultString.equals(login)) {
+					return true;
+				}
 			} else {
-				String str = "Brak gracza o padanym loginie: " + login + "\n";
+				String str = "Bad login: " + login + "\n";
 				logger.info(str);
 				console.append(str);
 			}
@@ -132,7 +126,7 @@ public class ConnHandler {
 		}
 		return false;
 	}
-	
+
 	/**
 	 * @param login
 	 * @param string
@@ -143,29 +137,30 @@ public class ConnHandler {
 		if (checkIfExists(login)) {
 			try {
 				result = dbHandler.checkPasswd(login, pass);
-			}
-			catch (RemoteException e) {
+			} catch (RemoteException e) {
 				logger.log(Level.SEVERE, e.toString(), e);
 				setConnected(false);
 				return false;
 			}
 			boolean correct = result.isResultBoolean();
-			if (correct) { return true; }
-			String str = "Bledne haslo. \n";
+			if (correct) {
+				return true;
+			}
+			String str = "Bad password!\n";
 			logger.info(str);
 			console.append(str);
 		}
 		return false;
 	}
-	
+
 	public void setConsole(JTextArea console) {
 		this.console = console;
 	}
-	
+
 	public boolean isConnected() {
 		return this.connected;
 	}
-	
+
 	public void setConnected(boolean connected) {
 		this.connected = connected;
 	}
