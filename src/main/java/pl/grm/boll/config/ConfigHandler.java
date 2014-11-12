@@ -36,7 +36,7 @@ public class ConfigHandler {
 	public ConfigHandler(Presenter presenter) {
 		this.presenter = presenter;
 		try {
-			logger = FileOperation.setupLauncherLogger(fHandler);
+			logger = FileOperation.setupLauncherLogger(ConfigHandler.class);
 		}
 		catch (ClassNotFoundException | IllegalArgumentException | IllegalAccessException
 				| NoSuchFieldException e) {

@@ -45,10 +45,10 @@ public class Presenter {
 	public Presenter() {
 		configHandler = new ConfigHandler(this);
 		try {
-			configHandler.setIni(FileOperation.readConfigFile());
+			configHandler.setIni(FileOperation.readConfigFile(ConfigHandler.class));
 		}
 		catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException
-				| SecurityException | ClassNotFoundException e) {
+				| SecurityException e) {
 			e.printStackTrace();
 		}
 	}

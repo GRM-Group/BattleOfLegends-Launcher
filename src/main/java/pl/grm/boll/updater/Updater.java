@@ -96,9 +96,9 @@ public class Updater {
 	public static synchronized boolean startUpdater(JProgressBar progressBar) {
 		Updater.progressBar = progressBar;
 		try {
-			Updater.jarFileAbsPath = FileOperation.getCurrentJar();
+			Updater.jarFileAbsPath = FileOperation.getCurrentJar(Updater.class);
 		}
-		catch (UnsupportedEncodingException | ClassNotFoundException e) {
+		catch (UnsupportedEncodingException e) {
 			logger.log(Level.SEVERE, e.toString(), e);
 		}
 		File confDir = new File(BoL_Conf_Path);
@@ -277,13 +277,10 @@ public class Updater {
 		File file = new File(fileNameC + "_old.jar");
 		file.delete();
 		try {
-			File file2 = new File(FileOperation.getCurrentJar());
+			File file2 = new File(FileOperation.getCurrentJar(Updater.class));
 			file2.deleteOnExit();
 		}
 		catch (UnsupportedEncodingException e) {
-			logger.log(Level.SEVERE, e.toString(), e);
-		}
-		catch (ClassNotFoundException e) {
 			logger.log(Level.SEVERE, e.toString(), e);
 		}
 	}
@@ -325,11 +322,11 @@ public class Updater {
 	 */
 	private static void updateConfig() {
 		try {
-			FileOperation.writeConfigParamLauncher(FileOperation.readConfigFile(), "version",
-					version);
+			FileOperation.writeConfigParamLauncher(FileOperation.readConfigFile(Updater.class),
+					"version", version);
 		}
 		catch (IOException | IllegalArgumentException | IllegalAccessException
-				| NoSuchFieldException | SecurityException | ClassNotFoundException e) {
+				| NoSuchFieldException | SecurityException e) {
 			logger.log(Level.SEVERE, e.toString(), e);
 		}
 	}
