@@ -5,15 +5,13 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 
-import javax.imageio.ImageIO;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.ScrollPaneConstants;
 
 import pl.grm.boll.Presenter;
+import pl.grm.boll.config.ResourceLoader;
 
 /**
  * Contains Console
@@ -33,16 +31,7 @@ public class LeftPanel extends JScrollPane {
 		super(textArea, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
 				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		this.presenter = presenterT;
-		try {
-			String path = System.getProperty("user.dir") + "\\src\\main\\resources\\background.jpg";
-			File file = new File(path);
-			System.out.println(path);
-			System.out.println(file.exists());
-			background = ImageIO.read(file);
-		}
-		catch (IOException ex) {
-			ex.printStackTrace();
-		}
+		background = ResourceLoader.getBGImage();
 		textArea.setLineWrap(true);
 		textArea.setPreferredSize(new Dimension(100, 100));
 		textArea.setEditable(false);

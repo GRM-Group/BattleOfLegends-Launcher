@@ -17,7 +17,9 @@ import org.ini4j.Wini;
 
 import pl.grm.boll.Presenter;
 import pl.grm.boll.lib.FileOperation;
-import pl.grm.boll.rmi.ConnHandler;
+import pl.grm.boll.math.Hashing;
+import pl.grm.boll.math.VersionComparator;
+import pl.grm.boll.net.rmi.ConnHandler;
 
 public class ConfigHandler {
 	public static final String	SERVER_LINK			= "http://grm-dev.pl/";

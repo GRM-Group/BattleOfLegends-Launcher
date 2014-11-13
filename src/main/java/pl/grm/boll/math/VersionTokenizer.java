@@ -1,4 +1,4 @@
-package pl.grm.boll.config;
+package pl.grm.boll.math;
 
 public class VersionTokenizer {
 	private String	version;

@@ -1,4 +1,4 @@
-package pl.grm.boll.rmi;
+package pl.grm.boll.net.rmi;
 
 import java.awt.Component;
 import java.rmi.AccessException;
@@ -60,7 +60,7 @@ public class ConnHandler {
 	 * @throws AccessException
 	 */
 	private static LauncherDB connect() throws RemoteException, NotBoundException, AccessException {
-		Registry registry = LocateRegistry.getRegistry("localhost", 1234);
+		Registry registry = LocateRegistry.getRegistry("localhost", 2234);
 		LauncherDB dbHandler = (LauncherDB) registry.lookup("dBConfBindHandler");
 		return dbHandler;
 	}

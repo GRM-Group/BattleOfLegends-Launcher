@@ -13,11 +13,11 @@ import pl.grm.boll.boxes.SettingsDialog;
 import pl.grm.boll.config.BLog;
 import pl.grm.boll.config.ConfigHandler;
 import pl.grm.boll.lib.FileOperation;
+import pl.grm.boll.net.updater.Updater;
 import pl.grm.boll.panels.AdvPanel;
 import pl.grm.boll.panels.GamePanel;
 import pl.grm.boll.panels.LoggedPanel;
 import pl.grm.boll.panels.LoginPanel;
-import pl.grm.boll.updater.Updater;
 
 /**
  * Presenter from MVP model.

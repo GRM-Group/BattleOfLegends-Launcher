@@ -1,4 +1,4 @@
-package pl.grm.boll.updater;
+package pl.grm.boll.net.updater;
 
 import java.io.File;
 import java.io.FileInputStream;

@@ -1,4 +1,4 @@
 /**
  * Database operations
  */
-package pl.grm.boll.rmi;
+package pl.grm.boll.net.rmi;
