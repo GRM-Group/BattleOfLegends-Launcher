@@ -9,12 +9,15 @@ import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
+import javax.swing.border.MatteBorder;
+import javax.swing.border.TitledBorder;
 
 import pl.grm.boll.Presenter;
 
@@ -22,24 +25,26 @@ import pl.grm.boll.Presenter;
  * Contains login/passwd fields and login button.
  */
 public class LoginPanel extends JPanel {
-	private JTextField		loginField;
-	private JPasswordField	passwordField;
-	private JButton			registerButton;
-	private JButton			loginButton;
-	private JCheckBox		autologinCheckBox;
-	private JCheckBox		rememberCheckBox;
-	private JLabel			hasloLabel;
-	private JLabel			loginLabel;
-	private Presenter		presenter;
+	private static final long	serialVersionUID	= 1L;
+	private JTextField			loginField;
+	private JPasswordField		passwordField;
+	private JButton				registerButton;
+	private JButton				loginButton;
+	private JCheckBox			autologinCheckBox;
+	private JCheckBox			rememberCheckBox;
+	private JLabel				hasloLabel;
+	private JLabel				loginLabel;
+	private Presenter			presenter;
 	
 	/**
 	 * Create the login panel.
 	 * 
-	 * @param presenter
+	 * @param presenterT
 	 */
 	public LoginPanel(Presenter presenterT) {
 		this.presenter = presenterT;
 		setLayout(new GridLayout(8, 2, 0, 0));
+		setBorder(new TitledBorder(new MatteBorder(new ImageIcon("java2sLogo.gif")), "Account"));
 		loginLabel = new JLabel("Login:");
 		add(loginLabel);
 		loginField = new JTextField();

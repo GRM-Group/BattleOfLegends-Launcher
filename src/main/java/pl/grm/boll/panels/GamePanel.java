@@ -4,27 +4,31 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
-import javax.swing.JLayeredPane;
+import javax.swing.JPanel;
 import javax.swing.JProgressBar;
+import javax.swing.border.MatteBorder;
+import javax.swing.border.TitledBorder;
 
 import pl.grm.boll.Presenter;
 
 /**
  * Contains game buttons, progress Bar and game info
  */
-public class GamePanel extends JLayeredPane {
-	private JButton			launchButton;
-	private JCheckBox		typeCheckBox;
-	private JProgressBar	updateProgressBar;
-	private JLabel			patchLabel;
-	private JButton			settingsButton;
-	private JLabel			versioniLabel;
-	private JLabel			versionLabel;
-	private JLabel			label;
-	private Presenter		presenter;
+public class GamePanel extends JPanel {
+	private static final long	serialVersionUID	= 1L;
+	private JButton				launchButton;
+	private JCheckBox			typeCheckBox;
+	private JProgressBar		updateProgressBar;
+	private JLabel				patchLabel;
+	private JButton				settingsButton;
+	private JLabel				versioniLabel;
+	private JLabel				versionLabel;
+	private JLabel				label;
+	private Presenter			presenter;
 	
 	/**
 	 * Create the game panel.
@@ -32,8 +36,10 @@ public class GamePanel extends JLayeredPane {
 	 * @param presenterT
 	 */
 	public GamePanel(Presenter presenterT) {
+		super();
 		this.presenter = presenterT;
 		setLayout(new GridLayout(2, 4, 0, 0));
+		setBorder(new TitledBorder(new MatteBorder(new ImageIcon("java2sLogo.gif")), "Game"));
 		versioniLabel = new JLabel("Game version");
 		add(versioniLabel);
 		versionLabel = new JLabel(presenterT.getConfigHandler().getIni().get("Game", "version"));

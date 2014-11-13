@@ -11,8 +11,9 @@ import pl.grm.boll.Presenter;
  * Contains advertises
  */
 public class AdvPanel extends JPanel {
-	private JLabel		banerLabel;
-	private Presenter	presenter;
+	private static final long	serialVersionUID	= 1L;
+	private JLabel				banerLabel;
+	private Presenter			presenter;
 	
 	/**
 	 * Create the info/settings panel.

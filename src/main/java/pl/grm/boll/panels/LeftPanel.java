@@ -19,7 +19,8 @@ import pl.grm.boll.Presenter;
  * Contains Console
  */
 public class LeftPanel extends JScrollPane {
-	private static TransparentTextArea	textArea	= new TransparentTextArea();
+	private static final long			serialVersionUID	= 1L;
+	private static TransparentTextArea	textArea			= new TransparentTextArea();
 	private Presenter					presenter;
 	private BufferedImage				background;
 	
@@ -46,18 +47,23 @@ public class LeftPanel extends JScrollPane {
 		textArea.setPreferredSize(new Dimension(100, 100));
 		textArea.setEditable(false);
 		textArea.setFont(new Font("LucidaSans", Font.PLAIN, 16));
-		// add(textArea);
 		setBackground(new Color(0, 0, 0, 0));
 		setOpaque(false);
 		getViewport().setOpaque(false);
 	}
 	
+	/**
+	 * Sets size to image resolustion
+	 */
 	@Override
 	public Dimension getPreferredSize() {
 		return background == null ? super.getPreferredSize() : new Dimension(background.getWidth(),
 				background.getHeight());
 	}
 	
+	/**
+	 * Paints component as transparent
+	 */
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);

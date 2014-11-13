@@ -18,12 +18,13 @@ import pl.grm.boll.Presenter;
  * Contains all setting panels with fields, buttons, etc.
  */
 public class RightPanel extends JPanel {
-	private LoginPanel		loginPanel;
-	private LoggedPanel		loggedPanel;
-	private GamePanel		gamePanel;
-	private AdvPanel		advPanel;
-	private Presenter		presenter;
-	private JLayeredPane	loggingPane;
+	private static final long	serialVersionUID	= 1L;
+	private LoginPanel			loginPanel;
+	private LoggedPanel			loggedPanel;
+	private GamePanel			gamePanel;
+	private AdvPanel			advPanel;
+	private Presenter			presenter;
+	private JLayeredPane		loggingPane;
 	
 	/**
 	 * Create the right panel.
