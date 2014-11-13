@@ -2,7 +2,12 @@ package pl.grm.boll.panels;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
+import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.GradientPaint;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
@@ -23,7 +28,7 @@ public class RightPanel extends JPanel {
 	/**
 	 * Create the right panel.
 	 * 
-	 * @param presenter
+	 * @param presenterT
 	 */
 	public RightPanel(Presenter presenterT) {
 		this.presenter = presenterT;
@@ -43,7 +48,20 @@ public class RightPanel extends JPanel {
 		gamePanel = new GamePanel(presenter);
 		add(gamePanel, BorderLayout.SOUTH);
 		setMinimumSize(new Dimension(300, 400));
-		setBackground(presenter.getBgColor());
+	}
+	
+	@Override
+	protected void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		Graphics2D g2d = (Graphics2D) g;
+		g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+		int w = getWidth();
+		int h = getHeight();
+		Color color1 = presenter.getBgColor();
+		Color color2 = color1.brighter();
+		GradientPaint gp = new GradientPaint(0, 20, color1, 80, 10, color2, true);
+		g2d.setPaint(gp);
+		g2d.fillRect(0, 0, w, h);
 	}
 	
 	/**

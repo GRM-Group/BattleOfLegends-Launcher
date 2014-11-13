@@ -1,17 +1,15 @@
 package pl.grm.boll;
 
 import java.awt.Dimension;
-import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
+import javax.swing.JSplitPane;
 import javax.swing.UIManager;
 import javax.swing.WindowConstants;
-import javax.swing.border.EmptyBorder;
 
 import pl.grm.boll.panels.LeftPanel;
 import pl.grm.boll.panels.RightPanel;
@@ -23,7 +21,7 @@ import pl.grm.boll.panels.RightPanel;
  */
 public class MainWindow extends JFrame {
 	private static final long	serialVersionUID	= 1L;
-	private JPanel				contentPane;
+	private JSplitPane			contentPane;
 	private RightPanel			rightPanel;
 	private LeftPanel			leftPanel;
 	private Presenter			presenter;
@@ -42,15 +40,16 @@ public class MainWindow extends JFrame {
 		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 		setBounds(100, 100, 600, 600);
 		setTitle("Battle Of Legends Launcher");
-		contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		setContentPane(contentPane);
-		contentPane.setLayout(new GridLayout(0, 2, 0, 0));
-		contentPane.setPreferredSize(setupBounds());
+		
 		leftPanel = new LeftPanel(presenter);
-		contentPane.add(leftPanel);
 		rightPanel = new RightPanel(presenter);
-		contentPane.add(rightPanel);
+		contentPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftPanel, rightPanel);
+		contentPane.setDividerLocation(380);
+		contentPane.setContinuousLayout(true);
+		contentPane.setOneTouchExpandable(true);
+		contentPane.setPreferredSize(setupBounds());
+		contentPane.setBackground(presenter.getBgColor());
+		setContentPane(contentPane);
 		setMinimumSize(new Dimension(400, 400));
 		setBackground(presenter.getBgColor());
 		pack();
@@ -59,8 +58,8 @@ public class MainWindow extends JFrame {
 			@Override
 			public void windowClosing(WindowEvent e) {
 				int confirmed = JOptionPane.showConfirmDialog(MainWindow.this,
-						"Are you sure you want to exit the program?",
-						"Exit Program Message Box", JOptionPane.YES_NO_OPTION);
+						"Are you sure you want to exit the program?", "Exit Program Message Box",
+						JOptionPane.YES_NO_OPTION);
 				if (confirmed == JOptionPane.YES_OPTION) {
 					setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 					presenter.getConfigHandler().getLogger().info("Launcher Closing ...");

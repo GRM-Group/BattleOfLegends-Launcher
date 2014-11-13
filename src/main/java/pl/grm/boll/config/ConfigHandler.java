@@ -30,18 +30,19 @@ public class ConfigHandler {
 	private Presenter			presenter;
 	private ConnHandler			connHandler;
 	private FileHandler			fHandler;
-	private Logger				logger;
-	private JTextArea			console;
+	private BLog				logger;
 	
 	public ConfigHandler(Presenter presenter) {
 		this.presenter = presenter;
+		Logger loggerR = null;
 		try {
-			logger = FileOperation.setupLauncherLogger(ConfigHandler.class);
+			loggerR = FileOperation.setupLauncherLogger(ConfigHandler.class);
 		}
 		catch (ClassNotFoundException | IllegalArgumentException | IllegalAccessException
 				| NoSuchFieldException e) {
 			e.printStackTrace();
 		}
+		logger = new BLog(loggerR);
 		connHandler = new ConnHandler(logger);
 		presenter.setLogger(logger);
 	}
@@ -105,15 +106,14 @@ public class ConfigHandler {
 	}
 	
 	public void setConsole(JTextArea console) {
-		this.console = console;
-		connHandler.setConsole(console);
+		logger.setConsole(console);
 	}
 	
 	public ConnHandler getConnHandler() {
 		return this.connHandler;
 	}
 	
-	public Logger getLogger() {
+	public BLog getLogger() {
 		return this.logger;
 	}
 	

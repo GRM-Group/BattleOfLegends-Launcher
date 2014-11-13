@@ -3,7 +3,6 @@ package pl.grm.boll;
 import java.awt.Color;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.swing.JOptionPane;
 import javax.swing.JProgressBar;
@@ -11,6 +10,7 @@ import javax.swing.JTextArea;
 import javax.swing.SwingWorker;
 
 import pl.grm.boll.boxes.SettingsDialog;
+import pl.grm.boll.config.BLog;
 import pl.grm.boll.config.ConfigHandler;
 import pl.grm.boll.lib.FileOperation;
 import pl.grm.boll.panels.AdvPanel;
@@ -36,7 +36,7 @@ public class Presenter {
 	private String			login;
 	private char[]			password;
 	private Color			bgColor	= new Color(0, 139, 139);
-	private Logger			logger;
+	private BLog			logger;
 	private JTextArea		console;
 	
 	/**
@@ -62,10 +62,11 @@ public class Presenter {
 		this.mainWindow = mainWindow;
 		saveComponentsRefs();
 		configHandler.setConsole(console);
+		logger.info("\u4eca\u65e5\u306f.");
 		if (configHandler.getConnHandler().isConnected()) {
-			console.append("You are online\n");
+			logger.info("You are online");
 		} else {
-			console.append("You are offline\n");
+			logger.info("You are offline");
 		}
 	}
 	
@@ -85,12 +86,11 @@ public class Presenter {
 		this.password = passwordT;
 		if (!configHandler.getConnHandler().isConnected()) {
 			if (!configHandler.getConnHandler().reconnect(mainWindow)) {
-				console.append("No connection to server!\n");
-				logger.info("No connection to server!\n");
+				logger.info("No connection to server!");
 				return;
 			}
 		}
-		console.append("Loging in ...\n");
+		logger.info("Loging in ...\n");
 		SwingWorker<Boolean, Void> worker = new SwingWorker<Boolean, Void>() {
 			@Override
 			protected Boolean doInBackground() throws Exception {
@@ -106,14 +106,12 @@ public class Presenter {
 					loginPanel.getLoginButton().setEnabled(true);
 					gamePanel.getProgressBar().setIndeterminate(false);
 					if (super.get()) {
-						console.append("Logged successfully!\n");
-						logger.info("Logged successfully!\n");
+						logger.info("Logged successfully!");
 						loginPanel.setVisible(false);
 						loggedPanel.getLblLoggedAs().setText(login);
 						loggedPanel.setVisible(true);
 					} else {
-						console.append("Problem with logging in!\n");
-						logger.info("Problem with logging in!\n");
+						logger.info("Problem with logging in!");
 					}
 				}
 				catch (InterruptedException e) {
@@ -138,7 +136,7 @@ public class Presenter {
 			
 			@Override
 			protected void done() {
-				console.append("Open register site!\n");
+				logger.info("Open register site!\n");
 				gamePanel.getProgressBar().setIndeterminate(false);
 			}
 		};
@@ -157,7 +155,7 @@ public class Presenter {
 			
 			@Override
 			protected void done() {
-				console.append("Settings\n");
+				logger.info("Settings");
 			}
 		};
 		worker.execute();
@@ -171,18 +169,17 @@ public class Presenter {
 				JProgressBar progressBar = gamePanel.getProgressBar();
 				progressBar.setValue(5);
 				if (configHandler.isUpToDate()) {
-					console.append("Launcher is up to date\n");
+					logger.info("Launcher is up to date");
 					progressBar.setValue(20);
-					console.append("Start game\n");
+					logger.info("Start game");
 				} else {
 					progressBar.setValue(7);
-					console.append("Launcher must be updated!\n");
+					logger.info("Launcher must be updated!");
 					int confirmed = JOptionPane.showConfirmDialog(mainWindow,
 							"Are you sure you want to update the launcher?",
 							"Exit Program Message Box", JOptionPane.YES_NO_OPTION);
 					if (confirmed == JOptionPane.YES_OPTION) {
 						logger.info("Launcher Updating ...");
-						console.append("Launcher Updating ...\n");
 						progressBar.setStringPainted(true);
 						progressBar.setToolTipText("Updating launcher");
 						progressBar.setString("Updating launcher");
@@ -193,9 +190,9 @@ public class Presenter {
 							progressBar.setValue(100);
 							return true;
 						}
-						console.append("Launcher update failed!\n");
+						logger.info("Launcher update failed!");
 					} else {
-						console.append("Launcher update cancelled!\n");
+						logger.info("Launcher update cancelled!");
 					}
 				}
 				return false;
@@ -230,8 +227,7 @@ public class Presenter {
 			protected Void doInBackground() throws Exception {
 				loginPanel.setVisible(true);
 				loggedPanel.setVisible(false);
-				console.append("Logout!\n");
-				logger.info("Logout!\n");
+				logger.info("Logout!");
 				return null;
 			}
 		};
@@ -246,7 +242,7 @@ public class Presenter {
 		return this.bgColor;
 	}
 	
-	public void setLogger(Logger logger) {
+	public void setLogger(BLog logger) {
 		this.logger = logger;
 	}
 	
