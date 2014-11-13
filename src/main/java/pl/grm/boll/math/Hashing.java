@@ -5,11 +5,18 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 public class Hashing {
-	public Hashing() {
+	public static String getHash(String password, String salt)
+			throws NoSuchAlgorithmException, UnsupportedEncodingException {
+		MessageDigest digest = MessageDigest.getInstance("SHA-256");
+		byte[] hash = digest.digest((password + salt).getBytes("UTF-8"));
+		return new String(hash);
 
+		// digest.reset();
+		// digest.update(salt);
+		// return digest.digest(password.getBytes("UTF-8"));
 	}
 
-	public static String hash(String pass, String method)
+	public static String hash(String pass, String method, String... salt)
 			throws NoSuchAlgorithmException, UnsupportedEncodingException {
 		switch (method) {
 			case "MD5" :
@@ -23,7 +30,8 @@ public class Hashing {
 				return sb.toString();
 			case "SHA-256" :
 				MessageDigest digest = MessageDigest.getInstance("SHA-256");
-				byte[] hash = digest.digest(pass.getBytes("UTF-8"));
+				digest.update(salt[0].getBytes());
+				byte[] hash = digest.digest((pass).getBytes("UTF-8"));
 				StringBuffer hexString = new StringBuffer();
 
 				for (int i = 0; i < hash.length; i++) {

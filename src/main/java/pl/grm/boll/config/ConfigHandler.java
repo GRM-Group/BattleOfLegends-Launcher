@@ -3,10 +3,10 @@ package pl.grm.boll.config;
 import java.awt.Desktop;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -19,7 +19,7 @@ import org.ini4j.Wini;
 
 import pl.grm.boll.Presenter;
 import pl.grm.boll.lib.FileOperation;
-import pl.grm.boll.math.Hashing;
+import pl.grm.boll.math.PasswordHash;
 import pl.grm.boll.math.VersionComparator;
 import pl.grm.boll.net.rmi.ConnHandler;
 
@@ -101,19 +101,23 @@ public class ConfigHandler {
 	}
 
 	public Boolean login(String login, char[] password) {
+		String pass = new String(password);
+		String salt = connHandler.getSalt(login);
 		try {
-			return connHandler.login(login,
-					Hashing.hash(new String(password), "SHA-256"));
+			// String hash = Hashing.hash(pass, "SHA-256", salt);
+			String hash = PasswordHash.createHash(pass, salt);
+			return connHandler.login(login, hash);
+			// return connHandler.login(login,
+			// Hashing.hash(new String(password), "SHA-256"));
 		} catch (NoSuchAlgorithmException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (UnsupportedEncodingException e) {
+		} catch (InvalidKeySpecException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return false;
 	}
-
 	public void setConsole(JTextArea console) {
 		logger.setConsole(console);
 	}
