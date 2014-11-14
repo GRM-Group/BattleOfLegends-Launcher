@@ -5,12 +5,22 @@ import java.util.logging.Logger;
 
 import javax.swing.JTextArea;
 
+import pl.grm.boll.lib.FileOperation;
+
 public class BLog {
 	private Logger		logger;
 	private JTextArea	console;
 	
-	public BLog(Logger logger) {
-		this.logger = logger;
+	public BLog() {
+		Logger loggerR = null;
+		try {
+			loggerR = FileOperation.setupLauncherLogger(ConfigHandler.class);
+		}
+		catch (ClassNotFoundException | IllegalArgumentException | IllegalAccessException
+				| NoSuchFieldException e) {
+			e.printStackTrace();
+		}
+		this.logger = loggerR;
 	}
 	
 	public synchronized void log(Level level, String msg, Throwable thrown) {

@@ -184,7 +184,7 @@ public class Presenter {
 						progressBar.setToolTipText("Updating launcher");
 						progressBar.setString("Updating launcher");
 						progressBar.setValue(9);
-						if (UpdaterStarter.startUpdater(progressBar)) {
+						if (UpdaterStarter.startUpdater(logger, progressBar)) {
 							progressBar.setToolTipText("Restarting launcher");
 							progressBar.setString("Restarting launcher");
 							progressBar.setValue(100);

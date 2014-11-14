@@ -9,7 +9,6 @@ import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.swing.JTextArea;
 
@@ -18,7 +17,6 @@ import org.ini4j.InvalidFileFormatException;
 import org.ini4j.Wini;
 
 import pl.grm.boll.Presenter;
-import pl.grm.boll.lib.FileOperation;
 import pl.grm.boll.math.PasswordHash;
 import pl.grm.boll.math.VersionComparator;
 import pl.grm.boll.net.rmi.ConnHandler;
@@ -27,9 +25,9 @@ public class ConfigHandler {
 	public static final String	SERVER_LINK			= "http://grm-dev.pl/";
 	public static final String	SERVER_VERSION_LINK	= SERVER_LINK + "bol/version.ini";
 	public static final String	APP_DATA			= System.getenv("APPDATA");
-	public static final String	BoL_Conf_Loc		= APP_DATA + "\\BOL\\";
-	public static final String	logFileName			= "launcher.log";
-	public static final String	configFileName		= "config.ini";
+	public static final String	BOL_CONF_LOC		= APP_DATA + "\\BOL\\";
+	public static final String	LOG_FILE_NAME			= "launcher.log";
+	public static final String	CONFIG_FILE_NAME		= "config.ini";
 	public static final String	LAUNCHER_VERSION	= "0.0.1";
 	private Wini				ini;
 	private Presenter			presenter;
@@ -39,15 +37,7 @@ public class ConfigHandler {
 	
 	public ConfigHandler(Presenter presenter) {
 		this.presenter = presenter;
-		Logger loggerR = null;
-		try {
-			loggerR = FileOperation.setupLauncherLogger(ConfigHandler.class);
-		}
-		catch (ClassNotFoundException | IllegalArgumentException | IllegalAccessException
-				| NoSuchFieldException e) {
-			e.printStackTrace();
-		}
-		logger = new BLog(loggerR);
+		logger = new BLog();
 		connHandler = new ConnHandler(logger);
 		presenter.setLogger(logger);
 	}

@@ -1,7 +1,6 @@
 package pl.grm.boll;
 
 import javax.swing.SwingUtilities;
-import javax.swing.WindowConstants;
 
 import pl.grm.boll.boxes.LauncherUpdateDialog;
 import pl.grm.boll.config.ConfigHandler;
@@ -30,8 +29,6 @@ public class Launcher {
 		} else {
 			try {
 				LauncherUpdateDialog updateDBox = new LauncherUpdateDialog();
-				updateDBox.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-				updateDBox.setVisible(true);
 				updateDBox.updateLauncher(presenter);
 			}
 			catch (Exception e) {

@@ -10,6 +10,7 @@ import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
+import javax.swing.WindowConstants;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 
@@ -39,22 +40,25 @@ public class LauncherUpdateDialog extends JDialog {
 		progressBar.setBorder(border);
 		content.add(progressBar, BorderLayout.NORTH);
 		setSize(300, 100);
+		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+		setVisible(true);
 	}
 	
 	public void updateLauncher(Presenter presenter) {
 		progressBar.setValue(7);
 		BLog logger = presenter.getConfigHandler().getLogger();
 		logger.info("There is new Launcher version!");
-		logger.info("Downloading updater ...");
+		logger.info("Starting update ...");
 		progressBar.setStringPainted(true);
 		progressBar.setToolTipText("Downloading updater");
 		progressBar.setValue(9);
-		if (UpdaterStarter.startUpdater(progressBar)) {
+		if (UpdaterStarter.startUpdater(logger, progressBar)) {
+			logger.info("Restarting launcher");
 			progressBar.setToolTipText("Restarting launcher");
 			progressBar.setString("Restarting launcher");
 			progressBar.setValue(100);
 			try {
-				Thread.sleep(1000L);
+				Thread.sleep(1500L);
 			}
 			catch (InterruptedException e) {
 				logger.log(Level.SEVERE, e.toString(), e);
