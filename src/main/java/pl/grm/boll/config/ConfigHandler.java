@@ -28,6 +28,7 @@ public class ConfigHandler {
 	public static final String	BoL_Conf_Loc		= APP_DATA + "\\BOL\\";
 	public static final String	logFileName			= "launcher.log";
 	public static final String	configFileName		= "config.ini";
+	public static final String	LAUNCHER_VERSION	= "0.0.1";
 	private Wini				ini;
 	private Presenter			presenter;
 	private ConnHandler			connHandler;
@@ -68,7 +69,7 @@ public class ConfigHandler {
 		return sIni.get(x, y);
 	}
 	
-	public boolean isUpToDate() {
+	public boolean launcherIsUpToDate() {
 		Ini sIni = new Ini();
 		VersionComparator cmp = new VersionComparator();
 		try {

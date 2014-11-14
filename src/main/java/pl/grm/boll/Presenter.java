@@ -13,7 +13,7 @@ import pl.grm.boll.boxes.SettingsDialog;
 import pl.grm.boll.config.BLog;
 import pl.grm.boll.config.ConfigHandler;
 import pl.grm.boll.lib.FileOperation;
-import pl.grm.boll.net.updater.Updater;
+import pl.grm.boll.net.updater.UpdaterStarter;
 import pl.grm.boll.panels.AdvPanel;
 import pl.grm.boll.panels.GamePanel;
 import pl.grm.boll.panels.LoggedPanel;
@@ -168,7 +168,7 @@ public class Presenter {
 				gamePanel.getLaunchButton().setEnabled(false);
 				JProgressBar progressBar = gamePanel.getProgressBar();
 				progressBar.setValue(5);
-				if (configHandler.isUpToDate()) {
+				if (configHandler.launcherIsUpToDate()) {
 					logger.info("Launcher is up to date");
 					progressBar.setValue(20);
 					logger.info("Start game");
@@ -184,7 +184,7 @@ public class Presenter {
 						progressBar.setToolTipText("Updating launcher");
 						progressBar.setString("Updating launcher");
 						progressBar.setValue(9);
-						if (Updater.startUpdater(progressBar)) {
+						if (UpdaterStarter.startUpdater(progressBar)) {
 							progressBar.setToolTipText("Restarting launcher");
 							progressBar.setString("Restarting launcher");
 							progressBar.setValue(100);

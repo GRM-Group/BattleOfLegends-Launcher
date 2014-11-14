@@ -19,8 +19,6 @@ group= "pl.grm"
 description = 'BOL Game Launcher Client'
 archivesBaseName = "BoL-Launcher"
 mainClassName = 'pl.grm.boll.Launcher'
-def mainUpdateClassName = 'pl.grm.boll.updater.Updater'
-def updaterBaseName = "BoL-Updater"
 
 repositories {
     mavenCentral()
@@ -44,11 +42,6 @@ jar {
 task execJar(type: OneJar) {
     mainClass = mainClassName
     archiveName = archivesBaseName+"-"+version+"-SNAPSHOT.jar"
-}
-
-task execJarUpd(type: OneJar) {
-    mainClass = mainUpdateClassName
-    archiveName = updaterBaseName+"-"+version+"-SNAPSHOT.jar"
 }
 
 findbugs {

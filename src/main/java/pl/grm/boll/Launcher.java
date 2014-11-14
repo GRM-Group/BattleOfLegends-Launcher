@@ -1,6 +1,10 @@
 package pl.grm.boll;
 
 import javax.swing.SwingUtilities;
+import javax.swing.WindowConstants;
+
+import pl.grm.boll.boxes.LauncherUpdateDialog;
+import pl.grm.boll.config.ConfigHandler;
 
 /**
  * Launcher main class.
@@ -14,12 +18,25 @@ public class Launcher {
 	 */
 	public static void main(String[] args) {
 		presenter = new Presenter();
-		SwingUtilities.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				mainWindow = new MainWindow(presenter);
-				mainWindow.setVisible(true);
+		ConfigHandler configHandler = presenter.getConfigHandler();
+		if (configHandler.launcherIsUpToDate()) {
+			SwingUtilities.invokeLater(new Runnable() {
+				@Override
+				public void run() {
+					mainWindow = new MainWindow(presenter);
+					mainWindow.setVisible(true);
+				}
+			});
+		} else {
+			try {
+				LauncherUpdateDialog updateDBox = new LauncherUpdateDialog();
+				updateDBox.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+				updateDBox.setVisible(true);
+				updateDBox.updateLauncher(presenter);
 			}
-		});
+			catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 	}
 }
