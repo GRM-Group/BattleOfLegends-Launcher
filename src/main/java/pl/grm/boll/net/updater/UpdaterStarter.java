@@ -41,7 +41,7 @@ public class UpdaterStarter {
 		UpdaterStarter.logger = logger;
 		UpdaterStarter.progressBar = progressBar;
 		try {
-			UpdaterStarter.jarFileAbsPath = FileOperation.getCurrentJar(UpdaterStarter.class);
+			jarFileAbsPath = FileOperation.getCurrentJar(UpdaterStarter.class);
 		}
 		catch (UnsupportedEncodingException e) {
 			logger.log(Level.SEVERE, e.toString(), e);
@@ -88,7 +88,8 @@ public class UpdaterStarter {
 		fileName = "BoL-Launcher_Updater-" + version + "-SNAPSHOT.jar";
 		if (!new File(ConfigHandler.BOL_CONF_LOC + fileName).exists()) {
 			try {
-				URL website = new URL(ConfigHandler.SERVER_LINK + "jenkins/artifacts/" + fileName);
+				URL website = new URL(ConfigHandler.SERVER_LINK + "jenkins/artifacts/"
+						+ fileName);
 				ReadableByteChannel rbc = Channels.newChannel(website.openStream());
 				FileOutputStream fos;
 				fos = new FileOutputStream(ConfigHandler.BOL_CONF_LOC + fileName);
@@ -112,15 +113,13 @@ public class UpdaterStarter {
 	
 	public static boolean startProcess(File confDir) {
 		String separator = System.getProperty("file.separator");
-		String javaPath = System.getProperty("java.home") + separator + "bin" + separator + "java";
-		String launcherPId = FileOperation.getProcessId(System.getProperty("user.dir")).trim();
-		logger.info("fileName: " + ConfigHandler.BOL_CONF_LOC + fileName + "  & jarPath: "
-				+ jarFileAbsPath + "  & dir: " + System.getProperty("user.dir")); // FIXME
-																					// repair
-																					// dashes
-																					// /
-																					// and
-																					// \
+		String javaPath = System.getProperty("java.home") + separator + "bin" + separator
+				+ "java";
+		String launcherPId = FileOperation.getProcessId(System.getProperty("user.dir"))
+				.trim();
+		logger.info("fileName: " + ConfigHandler.BOL_CONF_LOC + fileName
+				+ "  & jarPath: " + jarFileAbsPath + "  & dir: "
+				+ System.getProperty("user.dir"));
 		
 		ProcessBuilder processBuilder = new ProcessBuilder(javaPath, "-jar",
 				ConfigHandler.BOL_CONF_LOC + fileName, jarFileAbsPath, launcherPId,
