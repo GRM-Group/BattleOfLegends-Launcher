@@ -11,8 +11,8 @@ import java.util.logging.Level;
 import javax.swing.JOptionPane;
 
 import pl.grm.bol.launcher.config.BLog;
-import pl.grm.boll.lib.LauncherDB;
-import pl.grm.boll.lib.Result;
+import pl.grm.bol.lib.LauncherDB;
+import pl.grm.bol.lib.Result;
 
 public class ConnHandler {
 	private LauncherDB dbHandler;

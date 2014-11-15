@@ -18,7 +18,7 @@ import org.ini4j.InvalidFileFormatException;
 
 import pl.grm.bol.launcher.config.BLog;
 import pl.grm.bol.launcher.config.ConfigHandler;
-import pl.grm.boll.lib.FileOperation;
+import pl.grm.bol.lib.FileOperation;
 
 public class UpdaterStarter {
 	private static String		version	= "0.0.0";
@@ -46,7 +46,7 @@ public class UpdaterStarter {
 		catch (UnsupportedEncodingException e) {
 			logger.log(Level.SEVERE, e.toString(), e);
 		}
-		File confDir = new File(ConfigHandler.BOL_CONF_LOC);
+		File confDir = new File(ConfigHandler.BOL_CONF_PATH);
 		if (!confDir.exists()) {
 			confDir.mkdir();
 		}
@@ -86,13 +86,13 @@ public class UpdaterStarter {
 	private static void downloadUpdater() {
 		progressBar.setValue(14);
 		fileName = "BoL-Launcher_Updater-" + version + "-SNAPSHOT.jar";
-		if (!new File(ConfigHandler.BOL_CONF_LOC + fileName).exists()) {
+		if (!new File(ConfigHandler.BOL_CONF_PATH + fileName).exists()) {
 			try {
 				URL website = new URL(ConfigHandler.SERVER_LINK + "jenkins/artifacts/"
 						+ fileName);
 				ReadableByteChannel rbc = Channels.newChannel(website.openStream());
 				FileOutputStream fos;
-				fos = new FileOutputStream(ConfigHandler.BOL_CONF_LOC + fileName);
+				fos = new FileOutputStream(ConfigHandler.BOL_CONF_PATH + fileName);
 				progressBar.setValue(35);
 				fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
 				progressBar.setValue(65);
@@ -117,12 +117,12 @@ public class UpdaterStarter {
 				+ "java";
 		String launcherPId = FileOperation.getProcessId(System.getProperty("user.dir"))
 				.trim();
-		logger.info("Updater file to run: " + ConfigHandler.BOL_CONF_LOC + fileName
+		logger.info("Updater file to run: " + ConfigHandler.BOL_CONF_PATH + fileName
 				+ "  & launcher jar Path: " + jarFileAbsPath + "  & directory: "
 				+ System.getProperty("user.dir"));
 		
 		ProcessBuilder processBuilder = new ProcessBuilder(javaPath, "-jar",
-				ConfigHandler.BOL_CONF_LOC + fileName, jarFileAbsPath, launcherPId,
+				ConfigHandler.BOL_CONF_PATH + fileName, jarFileAbsPath, launcherPId,
 				System.getProperty("user.dir"));
 		progressBar.setValue(85);
 		try {

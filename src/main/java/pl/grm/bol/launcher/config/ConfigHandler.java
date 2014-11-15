@@ -25,7 +25,7 @@ public class ConfigHandler {
 	public static final String	SERVER_LINK			= "http://grm-dev.pl/";
 	public static final String	SERVER_VERSION_LINK	= SERVER_LINK + "bol/version.ini";
 	public static final String	APP_DATA			= System.getenv("APPDATA");
-	public static final String	BOL_CONF_LOC		= APP_DATA + "\\BOL\\";
+	public static final String	BOL_CONF_PATH		= APP_DATA + "\\BOL\\";
 	public static final String	LOG_FILE_NAME			= "launcher.log";
 	public static final String	CONFIG_FILE_NAME		= "config.ini";
 	public static final String	LAUNCHER_VERSION	= "0.0.1";

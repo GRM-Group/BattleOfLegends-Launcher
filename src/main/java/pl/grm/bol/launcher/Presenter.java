@@ -17,7 +17,7 @@ import pl.grm.bol.launcher.panels.AdvPanel;
 import pl.grm.bol.launcher.panels.GamePanel;
 import pl.grm.bol.launcher.panels.LoggedPanel;
 import pl.grm.bol.launcher.panels.LoginPanel;
-import pl.grm.boll.lib.FileOperation;
+import pl.grm.bol.lib.FileOperation;
 
 /**
  * Presenter from MVP model.

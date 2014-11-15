@@ -5,7 +5,7 @@ import java.util.logging.Logger;
 
 import javax.swing.JTextArea;
 
-import pl.grm.boll.lib.FileOperation;
+import pl.grm.bol.lib.FileOperation;
 
 public class BLog {
 	private Logger		logger;
