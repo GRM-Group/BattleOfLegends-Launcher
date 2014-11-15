@@ -18,7 +18,7 @@ group= "pl.grm"
 
 description = 'BOL Game Launcher Client'
 archivesBaseName = "BoL-Launcher"
-mainClassName = 'pl.grm.boll.Launcher'
+mainClassName = 'pl.grm.bol.launcher.Launcher'
 
 repositories {
     mavenCentral()
