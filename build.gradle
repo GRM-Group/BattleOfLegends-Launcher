@@ -34,7 +34,7 @@ dependencies {
 
 jar {
 	manifest {
-	attributes "Main-Class": "pl.grm.boll.Launcher"
+	attributes "Main-Class": "pl.grm.bol.launcher.Launcher"
 	attributes "Class-Path": configurations.compile.collect { it.getName() }.join(' ')
 	}
 }
