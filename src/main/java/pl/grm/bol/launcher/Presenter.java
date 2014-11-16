@@ -10,13 +10,13 @@ import javax.swing.JTextArea;
 import javax.swing.SwingWorker;
 
 import pl.grm.bol.launcher.boxes.SettingsDialog;
-import pl.grm.bol.launcher.config.BLog;
 import pl.grm.bol.launcher.config.ConfigHandler;
-import pl.grm.bol.launcher.net.updater.UpdaterStarter;
+import pl.grm.bol.launcher.config.GameStarter;
 import pl.grm.bol.launcher.panels.AdvPanel;
 import pl.grm.bol.launcher.panels.GamePanel;
 import pl.grm.bol.launcher.panels.LoggedPanel;
 import pl.grm.bol.launcher.panels.LoginPanel;
+import pl.grm.bol.lib.BLog;
 import pl.grm.bol.lib.FileOperation;
 
 /**
@@ -47,8 +47,7 @@ public class Presenter {
 		try {
 			configHandler.setIni(FileOperation.readConfigFile(ConfigHandler.class));
 		}
-		catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException
-				| SecurityException e) {
+		catch (IllegalArgumentException | SecurityException e) {
 			e.printStackTrace();
 		}
 	}
@@ -168,31 +167,34 @@ public class Presenter {
 				gamePanel.getLaunchButton().setEnabled(false);
 				JProgressBar progressBar = gamePanel.getProgressBar();
 				progressBar.setValue(5);
-				if (configHandler.launcherIsUpToDate()) {
-					logger.info("Launcher is up to date");
+				if (configHandler.isUpToDate("Game")) {
+					logger.info("Game is up to date");
 					progressBar.setValue(20);
-					logger.info("Start game");
+					logger.info("Starting game");
+					GameStarter.start(Presenter.this);
 				} else {
 					progressBar.setValue(7);
-					logger.info("Launcher must be updated!");
+					logger.info("Game must be updated!");
 					int confirmed = JOptionPane.showConfirmDialog(mainWindow,
-							"Are you sure you want to update the launcher?",
+							"Are you sure you want to update the game?",
 							"Exit Program Message Box", JOptionPane.YES_NO_OPTION);
 					if (confirmed == JOptionPane.YES_OPTION) {
-						logger.info("Launcher Updating ...");
+						logger.info("Game Updating ...");
 						progressBar.setStringPainted(true);
-						progressBar.setToolTipText("Updating launcher");
-						progressBar.setString("Updating launcher");
+						progressBar.setToolTipText("Updating Game");
+						progressBar.setString("Updating Game");
 						progressBar.setValue(9);
-						if (UpdaterStarter.startUpdater(logger, progressBar)) {
-							progressBar.setToolTipText("Restarting launcher");
-							progressBar.setString("Restarting launcher");
-							progressBar.setValue(100);
-							return true;
-						}
-						logger.info("Launcher update failed!");
+						// if (UpdaterStarter.startUpdater(logger, progressBar))
+						// {
+						// progressBar.setToolTipText("Restarting Game");
+						// progressBar.setString("Restarting Game");
+						// progressBar.setValue(100);
+						// return true;
+						// }
+						// TODO game updater
+						logger.info("Game update failed!");
 					} else {
-						logger.info("Launcher update cancelled!");
+						logger.info("Game update cancelled!");
 					}
 				}
 				return false;

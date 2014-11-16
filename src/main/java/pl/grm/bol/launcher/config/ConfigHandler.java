@@ -7,7 +7,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
-import java.util.logging.FileHandler;
 import java.util.logging.Level;
 
 import javax.swing.JTextArea;
@@ -20,24 +19,20 @@ import pl.grm.bol.launcher.Presenter;
 import pl.grm.bol.launcher.math.PasswordHash;
 import pl.grm.bol.launcher.math.VersionComparator;
 import pl.grm.bol.launcher.net.rmi.ConnHandler;
+import pl.grm.bol.lib.BLog;
+import pl.grm.bol.lib.Config;
 
 public class ConfigHandler {
-	public static final String	SERVER_LINK			= "http://grm-dev.pl/";
-	public static final String	SERVER_VERSION_LINK	= SERVER_LINK + "bol/version.ini";
-	public static final String	APP_DATA			= System.getenv("APPDATA");
-	public static final String	BOL_CONF_PATH		= APP_DATA + "\\BOL\\";
-	public static final String	LOG_FILE_NAME			= "launcher.log";
-	public static final String	CONFIG_FILE_NAME		= "config.ini";
+	public static final String	LOG_FILE_NAME		= "launcher.log";
 	public static final String	LAUNCHER_VERSION	= "0.0.1";
 	private Wini				ini;
 	private Presenter			presenter;
 	private ConnHandler			connHandler;
-	private FileHandler			fHandler;
 	private BLog				logger;
 	
 	public ConfigHandler(Presenter presenter) {
 		this.presenter = presenter;
-		logger = new BLog();
+		logger = new BLog("launcher.log");
 		connHandler = new ConnHandler(logger);
 		presenter.setLogger(logger);
 	}
@@ -61,14 +56,14 @@ public class ConfigHandler {
 		return sIni.get(x, y);
 	}
 	
-	public boolean launcherIsUpToDate() {
+	public boolean isUpToDate(String string) {
 		Ini sIni = new Ini();
 		VersionComparator cmp = new VersionComparator();
 		try {
-			URL url = new URL(SERVER_VERSION_LINK);
+			URL url = new URL(Config.SERVER_VERSION_LINK);
 			sIni.load(url);
-			String sVersion = sIni.get("Launcher", "last_version");
-			String lVersion = ini.get("Launcher", "version");
+			String sVersion = sIni.get(string, "last_version");
+			String lVersion = ini.get(string, "version");
 			
 			int result = cmp.compare(sVersion, lVersion);
 			if (result <= 0) {

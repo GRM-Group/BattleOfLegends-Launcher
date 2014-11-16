@@ -15,13 +15,13 @@ import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 
 import pl.grm.bol.launcher.Presenter;
-import pl.grm.bol.launcher.config.BLog;
 import pl.grm.bol.launcher.net.updater.UpdaterStarter;
+import pl.grm.bol.lib.BLog;
 
 public class LauncherUpdateDialog extends JDialog {
-	
-	private final JPanel	contentPanel	= new JPanel();
-	private JProgressBar	progressBar;
+	private static final long	serialVersionUID	= 1L;
+	private final JPanel		contentPanel		= new JPanel();
+	private JProgressBar		progressBar;
 	
 	/**
 	 * Create the dialog.
@@ -61,14 +61,14 @@ public class LauncherUpdateDialog extends JDialog {
 				Thread.sleep(1500L);
 			}
 			catch (InterruptedException e) {
-				logger.log(Level.SEVERE, e.toString(), e);
 				logger.info("Launcher update failed!");
+				logger.log(Level.SEVERE, e.toString(), e);
 				JOptionPane.showMessageDialog(this, "Update of launcher encauntered an error!",
 						"Update failed!", JOptionPane.ERROR_MESSAGE);
 			}
 		} else {
 			logger.info("Launcher update failed!");
-			JOptionPane.showMessageDialog(this, "Update of launcherfailed!", "Update failed!",
+			JOptionPane.showMessageDialog(this, "Update of launcher failed!", "Update failed!",
 					JOptionPane.ERROR_MESSAGE);
 		}
 		dispose();

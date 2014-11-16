@@ -18,7 +18,7 @@ public class Launcher {
 	public static void main(String[] args) {
 		presenter = new Presenter();
 		ConfigHandler configHandler = presenter.getConfigHandler();
-		if (configHandler.launcherIsUpToDate()) {
+		if (configHandler.isUpToDate("Launcher")) {
 			SwingUtilities.invokeLater(new Runnable() {
 				@Override
 				public void run() {

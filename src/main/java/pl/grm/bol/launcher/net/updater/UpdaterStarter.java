@@ -16,8 +16,8 @@ import javax.swing.JProgressBar;
 import org.ini4j.Ini;
 import org.ini4j.InvalidFileFormatException;
 
-import pl.grm.bol.launcher.config.BLog;
-import pl.grm.bol.launcher.config.ConfigHandler;
+import pl.grm.bol.lib.BLog;
+import pl.grm.bol.lib.Config;
 import pl.grm.bol.lib.FileOperation;
 
 public class UpdaterStarter {
@@ -46,7 +46,7 @@ public class UpdaterStarter {
 		catch (UnsupportedEncodingException e) {
 			logger.log(Level.SEVERE, e.toString(), e);
 		}
-		File confDir = new File(ConfigHandler.BOL_CONF_PATH);
+		File confDir = new File(Config.BOL_CONF_PATH);
 		if (!confDir.exists()) {
 			confDir.mkdir();
 		}
@@ -65,7 +65,7 @@ public class UpdaterStarter {
 		Ini sIni = new Ini();
 		URL url;
 		try {
-			url = new URL(ConfigHandler.SERVER_VERSION_LINK);
+			url = new URL(Config.SERVER_VERSION_LINK);
 			sIni.load(url);
 		}
 		catch (MalformedURLException e) {
@@ -86,13 +86,12 @@ public class UpdaterStarter {
 	private static void downloadUpdater() {
 		progressBar.setValue(14);
 		fileName = "BoL-Launcher_Updater-" + version + "-SNAPSHOT.jar";
-		if (!new File(ConfigHandler.BOL_CONF_PATH + fileName).exists()) {
+		if (!new File(Config.BOL_CONF_PATH + fileName).exists()) {
 			try {
-				URL website = new URL(ConfigHandler.SERVER_LINK + "jenkins/artifacts/"
-						+ fileName);
+				URL website = new URL(Config.SERVER_LINK + "jenkins/artifacts/" + fileName);
 				ReadableByteChannel rbc = Channels.newChannel(website.openStream());
 				FileOutputStream fos;
-				fos = new FileOutputStream(ConfigHandler.BOL_CONF_PATH + fileName);
+				fos = new FileOutputStream(Config.BOL_CONF_PATH + fileName);
 				progressBar.setValue(35);
 				fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
 				progressBar.setValue(65);
@@ -113,17 +112,14 @@ public class UpdaterStarter {
 	
 	public static boolean startProcess(File confDir) {
 		String separator = System.getProperty("file.separator");
-		String javaPath = System.getProperty("java.home") + separator + "bin" + separator
-				+ "java";
-		String launcherPId = FileOperation.getProcessId(System.getProperty("user.dir"))
-				.trim();
-		logger.info("Updater file to run: " + ConfigHandler.BOL_CONF_PATH + fileName
+		String javaPath = System.getProperty("java.home") + separator + "bin" + separator + "java";
+		String launcherPId = FileOperation.getProcessId(System.getProperty("user.dir")).trim();
+		logger.info("Updater file to run: " + Config.BOL_CONF_PATH + fileName
 				+ "  & launcher jar Path: " + jarFileAbsPath + "  & directory: "
 				+ System.getProperty("user.dir"));
 		
-		ProcessBuilder processBuilder = new ProcessBuilder(javaPath, "-jar",
-				ConfigHandler.BOL_CONF_PATH + fileName, jarFileAbsPath, launcherPId,
-				System.getProperty("user.dir"));
+		ProcessBuilder processBuilder = new ProcessBuilder(javaPath, "-jar", Config.BOL_CONF_PATH
+				+ fileName, jarFileAbsPath, launcherPId, System.getProperty("user.dir"));
 		progressBar.setValue(85);
 		try {
 			processBuilder.directory(confDir);

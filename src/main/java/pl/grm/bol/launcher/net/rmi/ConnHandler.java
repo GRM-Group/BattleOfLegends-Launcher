@@ -10,7 +10,7 @@ import java.util.logging.Level;
 
 import javax.swing.JOptionPane;
 
-import pl.grm.bol.launcher.config.BLog;
+import pl.grm.bol.lib.BLog;
 import pl.grm.bol.lib.LauncherDB;
 import pl.grm.bol.lib.Result;
 
