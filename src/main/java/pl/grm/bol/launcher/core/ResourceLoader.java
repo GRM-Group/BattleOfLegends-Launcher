@@ -1,4 +1,4 @@
-package pl.grm.bol.launcher.config;
+package pl.grm.bol.launcher.core;
 
 import java.awt.image.BufferedImage;
 import java.io.File;

@@ -1,4 +1,4 @@
-package pl.grm.bol.launcher.config;
+package pl.grm.bol.launcher.core;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -80,10 +80,10 @@ public class GameStarter {
 		}
 		try {
 			String fileName = "BattleOfLegends-" + version + "-SNAPSHOT.jar";
-			URL website = new URL(Config.SERVER_LINK + "jenkins/artifacts/" + fileName);
+			URL website = new URL(Config.SERVER_SITE_LINK + "jenkins/artifacts/" + fileName);
 			ReadableByteChannel rbc = Channels.newChannel(website.openStream());
 			FileOutputStream fos;
-			fos = new FileOutputStream(Config.BOL_CONF_PATH + fileName);
+			fos = new FileOutputStream(Config.BOL_MAIN_PATH + fileName);
 			fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
 			fos.close();
 		}
@@ -180,7 +180,7 @@ public class GameStarter {
 	}
 	
 	public static boolean gameFileExists() {
-		gameFilePath = Config.BOL_CONF_PATH + "BattleOfLegends-" + version + "-SNAPSHOT.jar";
+		gameFilePath = Config.BOL_MAIN_PATH + "BattleOfLegends-" + version + "-SNAPSHOT.jar";
 		gameFile = new File(gameFilePath);
 		if (gameFile.exists()) { return true; }
 		return false;

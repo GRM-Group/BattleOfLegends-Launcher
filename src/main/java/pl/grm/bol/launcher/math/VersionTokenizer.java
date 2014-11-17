@@ -18,10 +18,8 @@ public class VersionTokenizer {
 		number = 0;
 		suffix = "";
 		value = false;
-		
 		if (position >= length) { return false; }
 		value = true;
-		
 		while (position < length) {
 			char xD = version.charAt(position);
 			if (xD < '0' || xD > '9') {
@@ -31,7 +29,6 @@ public class VersionTokenizer {
 			position++;
 		}
 		int suffixStart = position;
-		
 		while (position < length) {
 			char xD = version.charAt(position);
 			if (xD == '.') {

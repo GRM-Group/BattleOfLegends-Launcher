@@ -34,21 +34,25 @@ public class RightPanel extends JPanel {
 	public RightPanel(Presenter presenterT) {
 		this.presenter = presenterT;
 		setLayout(new BorderLayout(0, 0));
+		setMinimumSize(new Dimension(300, 400));
 		
 		loggingPane = new JLayeredPane();
-		add(loggingPane, BorderLayout.NORTH);
 		loggingPane.setLayout(new CardLayout(0, 0));
+		add(loggingPane, BorderLayout.NORTH);
+		
 		loginPanel = new LoginPanel(presenter);
-		loggingPane.add(loginPanel, "name_1217819113516207");
-		loggedPanel = new LoggedPanel(presenter);
-		loggingPane.add(loggedPanel, "name_1217819120903469");
-		loggedPanel.setVisible(false);
 		loginPanel.setVisible(true);
+		loggingPane.add(loginPanel);
+		
+		loggedPanel = new LoggedPanel(presenter);
+		loggedPanel.setVisible(false);
+		loggingPane.add(loggedPanel);
+		
 		advPanel = new AdvPanel(presenter);
 		add(advPanel, BorderLayout.CENTER);
+		
 		gamePanel = new GamePanel(presenter);
 		add(gamePanel, BorderLayout.SOUTH);
-		setMinimumSize(new Dimension(300, 400));
 	}
 	
 	@Override
@@ -86,6 +90,9 @@ public class RightPanel extends JPanel {
 		return gamePanel;
 	}
 	
+	/**
+	 * @return {@link LoggedPanel}
+	 */
 	public LoggedPanel getLoggedPanel() {
 		return loggedPanel;
 	}

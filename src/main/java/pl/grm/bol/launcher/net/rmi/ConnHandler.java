@@ -11,6 +11,7 @@ import java.util.logging.Level;
 import javax.swing.JOptionPane;
 
 import pl.grm.bol.lib.BLog;
+import pl.grm.bol.lib.Config;
 import pl.grm.bol.lib.LauncherDB;
 import pl.grm.bol.lib.Result;
 
@@ -26,7 +27,6 @@ public class ConnHandler {
 			redo = false;
 			try {
 				dbHandler = connect();
-				redo = false;
 				setConnected(true);
 			}
 			catch (AccessException e) {
@@ -51,16 +51,6 @@ public class ConnHandler {
 		while (redo);
 	}
 	
-	public String getSalt(String login) {
-		try {
-			return dbHandler.checkSalt(login).getResultString();
-		}
-		catch (RemoteException e) {
-			logger.log(Level.SEVERE, e.toString(), e);
-		}
-		return null;
-	}
-	
 	/**
 	 * Connects to server with dBControls.
 	 * 
@@ -69,9 +59,8 @@ public class ConnHandler {
 	 * @throws NotBoundException
 	 * @throws AccessException
 	 */
-	private static LauncherDB connect() throws RemoteException, NotBoundException,
-			AccessException {
-		Registry registry = LocateRegistry.getRegistry("localhost", 2234);
+	private static LauncherDB connect() throws RemoteException, NotBoundException, AccessException {
+		Registry registry = LocateRegistry.getRegistry(Config.SERVER_LINK, 2234);
 		LauncherDB dbHandler = (LauncherDB) registry.lookup("dBConfBindHandler");
 		return dbHandler;
 	}
@@ -134,8 +123,7 @@ public class ConnHandler {
 				logger.info(str);
 			}
 		} else {
-			logger.log(Level.SEVERE, result.getException().toString(),
-					result.getException());
+			logger.log(Level.SEVERE, result.getException().toString(), result.getException());
 		}
 		return false;
 	}
@@ -162,6 +150,16 @@ public class ConnHandler {
 			logger.info(str);
 		}
 		return false;
+	}
+	
+	public String getSalt(String login) {
+		try {
+			return dbHandler.checkSalt(login).getResultString();
+		}
+		catch (RemoteException e) {
+			logger.log(Level.SEVERE, e.toString(), e);
+		}
+		return null;
 	}
 	
 	public int getPlayerPermissionLevel(String login) {

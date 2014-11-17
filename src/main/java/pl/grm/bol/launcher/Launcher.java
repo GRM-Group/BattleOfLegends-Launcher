@@ -3,7 +3,7 @@ package pl.grm.bol.launcher;
 import javax.swing.SwingUtilities;
 
 import pl.grm.bol.launcher.boxes.LauncherUpdateDialog;
-import pl.grm.bol.launcher.config.ConfigHandler;
+import pl.grm.bol.launcher.core.ConfigHandler;
 
 /**
  * Launcher main class.

@@ -41,14 +41,14 @@ public class UpdaterStarter {
 		UpdaterStarter.logger = logger;
 		UpdaterStarter.progressBar = progressBar;
 		try {
-			jarFileAbsPath = FileOperation.getCurrentJar(UpdaterStarter.class);
+			jarFileAbsPath = FileOperation.getCurrentJarPath(UpdaterStarter.class);
 		}
 		catch (UnsupportedEncodingException e) {
 			logger.log(Level.SEVERE, e.toString(), e);
 		}
-		File confDir = new File(Config.BOL_CONF_PATH);
+		File confDir = new File(Config.BOL_MAIN_PATH);
 		if (!confDir.exists()) {
-			confDir.mkdir();
+			FileOperation.createBOLDir();
 		}
 		checkoutServerVersion();
 		logger.info("Downloading updater ...");
@@ -67,6 +67,7 @@ public class UpdaterStarter {
 		try {
 			url = new URL(Config.SERVER_VERSION_LINK);
 			sIni.load(url);
+			version = sIni.get("Launcher", "last_version");
 		}
 		catch (MalformedURLException e) {
 			logger.log(Level.SEVERE, e.toString(), e);
@@ -77,7 +78,6 @@ public class UpdaterStarter {
 		catch (IOException e) {
 			logger.log(Level.SEVERE, e.toString(), e);
 		}
-		version = sIni.get("Launcher", "last_version");
 	}
 	
 	/**
@@ -85,13 +85,12 @@ public class UpdaterStarter {
 	 */
 	private static void downloadUpdater() {
 		progressBar.setValue(14);
-		fileName = "BoL-Launcher_Updater-" + version + "-SNAPSHOT.jar";
-		if (!new File(Config.BOL_CONF_PATH + fileName).exists()) {
+		fileName = "BoL-Launcher_Updater-" + version + Config.RELEASE_TYPE;
+		if (!new File(Config.BOL_MAIN_PATH + fileName).exists()) {
 			try {
-				URL website = new URL(Config.SERVER_LINK + "jenkins/artifacts/" + fileName);
+				URL website = new URL(Config.SERVER_SITE_LINK + "jenkins/artifacts/" + fileName);
 				ReadableByteChannel rbc = Channels.newChannel(website.openStream());
-				FileOutputStream fos;
-				fos = new FileOutputStream(Config.BOL_CONF_PATH + fileName);
+				FileOutputStream fos = new FileOutputStream(Config.BOL_MAIN_PATH + fileName);
 				progressBar.setValue(35);
 				fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
 				progressBar.setValue(65);
@@ -111,15 +110,13 @@ public class UpdaterStarter {
 	}
 	
 	public static boolean startProcess(File confDir) {
-		String separator = System.getProperty("file.separator");
-		String javaPath = System.getProperty("java.home") + separator + "bin" + separator + "java";
-		String launcherPId = FileOperation.getProcessId(System.getProperty("user.dir")).trim();
-		logger.info("Updater file to run: " + Config.BOL_CONF_PATH + fileName
-				+ "  & launcher jar Path: " + jarFileAbsPath + "  & directory: "
-				+ System.getProperty("user.dir"));
 		
-		ProcessBuilder processBuilder = new ProcessBuilder(javaPath, "-jar", Config.BOL_CONF_PATH
-				+ fileName, jarFileAbsPath, launcherPId, System.getProperty("user.dir"));
+		logger.info("Updater file to run: " + Config.BOL_MAIN_PATH + fileName
+				+ "  & launcher jar Path: " + jarFileAbsPath + "  & directory: " + Config.USER_DIR);
+		
+		ProcessBuilder processBuilder = new ProcessBuilder(Config.JAVA_PATH, "-jar",
+				Config.BOL_MAIN_PATH + fileName, jarFileAbsPath, Config.LAUNCHER_PID,
+				Config.USER_DIR);
 		progressBar.setValue(85);
 		try {
 			processBuilder.directory(confDir);

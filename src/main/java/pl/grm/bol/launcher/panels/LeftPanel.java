@@ -11,7 +11,7 @@ import javax.swing.JTextArea;
 import javax.swing.ScrollPaneConstants;
 
 import pl.grm.bol.launcher.Presenter;
-import pl.grm.bol.launcher.config.ResourceLoader;
+import pl.grm.bol.launcher.core.ResourceLoader;
 
 /**
  * Contains Console

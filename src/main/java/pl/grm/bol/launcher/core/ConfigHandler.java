@@ -1,4 +1,4 @@
-package pl.grm.bol.launcher.config;
+package pl.grm.bol.launcher.core;
 
 import java.awt.Desktop;
 import java.io.FileNotFoundException;
@@ -6,8 +6,6 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.logging.Level;
-
-import javax.swing.JTextArea;
 
 import org.ini4j.Ini;
 import org.ini4j.InvalidFileFormatException;
@@ -19,7 +17,11 @@ import pl.grm.bol.launcher.math.VersionComparator;
 import pl.grm.bol.launcher.net.rmi.ConnHandler;
 import pl.grm.bol.lib.BLog;
 import pl.grm.bol.lib.Config;
+import pl.grm.bol.lib.FileOperation;
 
+/**
+ * Config of launcher and connector beteen web/model/presenter
+ */
 public class ConfigHandler {
 	public static final String	LOG_FILE_NAME		= "launcher.log";
 	public static final String	LAUNCHER_VERSION	= "0.0.2";
@@ -28,18 +30,30 @@ public class ConfigHandler {
 	private BLog				logger;
 	private String				login;
 	
+	/**
+	 * Creates logger and read config file
+	 * 
+	 * @param presenter
+	 */
 	public ConfigHandler(Presenter presenter) {
 		logger = new BLog("launcher.log");
 		connHandler = new ConnHandler(logger);
 		presenter.setLogger(logger);
+		setIni(FileOperation.readConfigFile(LAUNCHER_VERSION));
 	}
 	
-	public String getServerConfig(String site, String x, String y) {
+	/**
+	 * @param section
+	 * @param option
+	 * @return {@link String} value of option in section
+	 */
+	public String getServerConfigOption(String section, String option) {
 		Ini sIni = new Ini();
 		URL url;
 		try {
-			url = new URL(site);
+			url = new URL(Config.SERVER_VERSION_LINK);
 			sIni.load(url);
+			return sIni.get(section, option);
 		}
 		catch (MalformedURLException e) {
 			logger.log(Level.SEVERE, e.toString(), e);
@@ -50,9 +64,15 @@ public class ConfigHandler {
 		catch (IOException e) {
 			logger.log(Level.SEVERE, e.toString(), e);
 		}
-		return sIni.get(x, y);
+		return null;
 	}
 	
+	/**
+	 * Checks if Launcher/Game is updated.
+	 * 
+	 * @param string
+	 * @return true if updated
+	 */
 	public boolean isUpToDate(String string) {
 		Ini sIni = new Ini();
 		VersionComparator cmp = new VersionComparator();
@@ -79,25 +99,34 @@ public class ConfigHandler {
 		return false;
 	}
 	
+	/**
+	 * Opens specified page in default Browser
+	 * 
+	 * @param urlString
+	 */
 	public static void openWebpage(String urlString) {
 		try {
 			Desktop.getDesktop().browse(new URL(urlString).toURI());
 		}
 		catch (Exception e) {
-			
+			e.printStackTrace();
 		}
 	}
 	
+	/**
+	 * Login user with login and pass. Also hashes this pass with salt from dB
+	 * 
+	 * @param login
+	 * @param password
+	 * @return true if logged successfully
+	 */
 	public Boolean login(String login, char[] password) {
 		this.login = login;
 		String pass = new String(password);
 		String salt = connHandler.getSalt(login);
 		String hash = PasswordHash.hash(pass, salt);
+		pass = "";
 		return connHandler.login(login, hash);
-	}
-	
-	public void setConsole(JTextArea console) {
-		logger.setConsole(console);
 	}
 	
 	public ConnHandler getConnHandler() {

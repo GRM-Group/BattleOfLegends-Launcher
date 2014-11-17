@@ -27,20 +27,20 @@ public class LauncherUpdateDialog extends JDialog {
 	 * Create the dialog.
 	 */
 	public LauncherUpdateDialog() {
+		Container content = getContentPane();
 		setBounds(100, 100, 450, 300);
+		Border border = BorderFactory.createTitledBorder("Updating Launcher ...");
+		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+		setSize(300, 100);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setLayout(new FlowLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
-		Container content = getContentPane();
 		progressBar = new JProgressBar();
 		progressBar.setValue(0);
 		progressBar.setStringPainted(true);
-		Border border = BorderFactory.createTitledBorder("Updating Launcher ...");
 		progressBar.setBorder(border);
 		content.add(progressBar, BorderLayout.NORTH);
-		setSize(300, 100);
-		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		setVisible(true);
 	}
 	
@@ -48,7 +48,7 @@ public class LauncherUpdateDialog extends JDialog {
 		progressBar.setValue(7);
 		BLog logger = presenter.getConfigHandler().getLogger();
 		logger.info("There is new Launcher version!");
-		logger.info("Starting update ...");
+		logger.info("Preparing to update ...");
 		progressBar.setStringPainted(true);
 		progressBar.setToolTipText("Downloading updater");
 		progressBar.setValue(9);

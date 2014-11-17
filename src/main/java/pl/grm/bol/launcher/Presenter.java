@@ -10,14 +10,14 @@ import javax.swing.JTextArea;
 import javax.swing.SwingWorker;
 
 import pl.grm.bol.launcher.boxes.SettingsDialog;
-import pl.grm.bol.launcher.config.ConfigHandler;
-import pl.grm.bol.launcher.config.GameStarter;
+import pl.grm.bol.launcher.core.ConfigHandler;
+import pl.grm.bol.launcher.core.GameStarter;
+import pl.grm.bol.launcher.core.SwingWorkersImpl;
 import pl.grm.bol.launcher.panels.AdvPanel;
 import pl.grm.bol.launcher.panels.GamePanel;
 import pl.grm.bol.launcher.panels.LoggedPanel;
 import pl.grm.bol.launcher.panels.LoginPanel;
 import pl.grm.bol.lib.BLog;
-import pl.grm.bol.lib.FileOperation;
 
 /**
  * Presenter from MVP model.
@@ -27,62 +27,52 @@ import pl.grm.bol.lib.FileOperation;
  * This presenter has also some kind of temp model.
  */
 public class Presenter {
-	private MainWindow mainWindow;
-	private ConfigHandler configHandler;
-	private LoginPanel loginPanel;
-	private LoggedPanel loggedPanel;
-	private AdvPanel advPanel;
-	private GamePanel gamePanel;
-	private String login;
-	private char[] password;
-	private Color bgColor = new Color(0, 139, 139);
-	private BLog logger;
-	private JTextArea console;
-
-	/**
-	 * Presenter Constructor
-	 */
+	private MainWindow		mainWindow;
+	private ConfigHandler	configHandler;
+	private LoginPanel		loginPanel;
+	private LoggedPanel		loggedPanel;
+	private AdvPanel		advPanel;
+	private GamePanel		gamePanel;
+	private String			login;
+	private Color			bgColor	= new Color(0, 139, 139);
+	private BLog			logger;
+	private JTextArea		console;
+	
 	public Presenter() {
 		configHandler = new ConfigHandler(this);
-		try {
-			configHandler.setIni(FileOperation
-					.readConfigFile(ConfigHandler.class));
-		} catch (IllegalArgumentException | SecurityException e) {
-			e.printStackTrace();
-		}
 	}
-
+	
 	/**
-	 * Adds reference to mainWindow and its components.
+	 * Adds reference to mainWindow.
 	 * 
 	 * @param mainWindow
 	 */
 	public void addWindow(MainWindow mainWindow) {
 		this.mainWindow = mainWindow;
 		saveComponentsRefs();
-		configHandler.setConsole(console);
+		logger.setConsole(console);
 		logger.info("\u4eca\u65e5\u306f.");
 		if (configHandler.getConnHandler().isConnected()) {
 			logger.info("You are online");
 		} else {
 			logger.info("You are offline");
 		}
+		SwingWorkersImpl.setPresenter(this);
 	}
-
+	
 	/**
 	 * Saves references to objects in panels.
 	 */
 	private void saveComponentsRefs() {
-		this.console = this.mainWindow.getLeftPanel().getConsole();
-		this.loginPanel = this.mainWindow.getRightPanel().getLoginPanel();
-		this.loggedPanel = this.mainWindow.getRightPanel().getLoggedPanel();
-		this.advPanel = this.mainWindow.getRightPanel().getAdvPanel();
-		this.gamePanel = this.mainWindow.getRightPanel().getGamePanel();
+		this.console = mainWindow.getLeftPanel().getConsole();
+		this.loginPanel = mainWindow.getRightPanel().getLoginPanel();
+		this.loggedPanel = mainWindow.getRightPanel().getLoggedPanel();
+		this.advPanel = mainWindow.getRightPanel().getAdvPanel();
+		this.gamePanel = mainWindow.getRightPanel().getGamePanel();
 	}
-
-	public synchronized void pressedLoginButton(String loginT, char[] passwordT) {
+	
+	public synchronized void pressedLoginButton(String loginT, char[] password) {
 		this.login = loginT;
-		this.password = passwordT;
 		if (!configHandler.getConnHandler().isConnected()) {
 			if (!configHandler.getConnHandler().reconnect(mainWindow)) {
 				logger.info("No connection to server!");
@@ -90,57 +80,15 @@ public class Presenter {
 			}
 		}
 		logger.info("Loging in ...\n");
-		SwingWorker<Boolean, Void> worker = new SwingWorker<Boolean, Void>() {
-			@Override
-			protected Boolean doInBackground() throws Exception {
-				loginPanel.getLoginButton().setEnabled(false);
-				gamePanel.getProgressBar().setIndeterminate(true);
-				boolean success = configHandler.login(login, password);
-				return success;
-			}
-
-			@Override
-			protected void done() {
-				try {
-					loginPanel.getLoginButton().setEnabled(true);
-					gamePanel.getProgressBar().setIndeterminate(false);
-					if (super.get()) {
-						logger.info("Logged successfully!");
-						loginPanel.setVisible(false);
-						loggedPanel.getLblLoggedAs().setText(login);
-						loggedPanel.setVisible(true);
-					} else {
-						logger.info("Problem with logging in!");
-					}
-				} catch (InterruptedException e) {
-					logger.log(Level.SEVERE, e.toString(), e);
-				} catch (ExecutionException e) {
-					logger.log(Level.SEVERE, e.toString(), e);
-				}
-			}
-		};
+		SwingWorker<Boolean, Void> worker = SwingWorkersImpl.Login(password);
 		worker.execute();
 	}
-
+	
 	public synchronized void pressedRegisterButton() {
-		SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
-			@Override
-			protected Void doInBackground() throws Exception {
-				gamePanel.getProgressBar().setIndeterminate(true);
-				ConfigHandler
-						.openWebpage("http://grm-dev.pl/bol/web/rejestracja.php");
-				return null;
-			}
-
-			@Override
-			protected void done() {
-				logger.info("Open register site!\n");
-				gamePanel.getProgressBar().setIndeterminate(false);
-			}
-		};
+		SwingWorker<Void, Void> worker = SwingWorkersImpl.Register();
 		worker.execute();
 	}
-
+	
 	public synchronized void pressedSettingsButton() {
 		SwingWorker<Boolean, Void> worker = new SwingWorker<Boolean, Void>() {
 			@Override
@@ -150,7 +98,7 @@ public class Presenter {
 				setDBox.setModal(true);
 				return null;
 			}
-
+			
 			@Override
 			protected void done() {
 				logger.info("Settings");
@@ -158,7 +106,7 @@ public class Presenter {
 		};
 		worker.execute();
 	}
-
+	
 	public synchronized void pressedStartButton() {
 		SwingWorker<Boolean, Void> worker = new SwingWorker<Boolean, Void>() {
 			@Override
@@ -171,8 +119,7 @@ public class Presenter {
 					logger.info("Game must be updated!");
 					int confirmed = JOptionPane.showConfirmDialog(mainWindow,
 							"Are you sure you want to update the game?",
-							"Exit Program Message Box",
-							JOptionPane.YES_NO_OPTION);
+							"Exit Program Message Box", JOptionPane.YES_NO_OPTION);
 					if (confirmed == JOptionPane.YES_OPTION) {
 						logger.info("Game Updating ...");
 						progressBar.setStringPainted(true);
@@ -193,7 +140,7 @@ public class Presenter {
 				logger.info("Game update failed!");
 				return true;
 			}
-
+			
 			@Override
 			protected void done() {
 				try {
@@ -201,9 +148,11 @@ public class Presenter {
 						Thread.sleep(2000L);
 						System.exit(0);
 					}
-				} catch (InterruptedException e) {
+				}
+				catch (InterruptedException e) {
 					logger.log(Level.SEVERE, e.toString(), e);
-				} catch (ExecutionException e) {
+				}
+				catch (ExecutionException e) {
 					logger.log(Level.SEVERE, e.toString(), e);
 				}
 				gamePanel.getLaunchButton().setEnabled(true);
@@ -214,7 +163,7 @@ public class Presenter {
 		};
 		worker.execute();
 	}
-
+	
 	public void pressedLogoutButton() {
 		SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
 			@Override
@@ -227,24 +176,28 @@ public class Presenter {
 		};
 		worker.execute();
 	}
-
+	
 	public MainWindow getMainWindow() {
 		return mainWindow;
 	}
-
+	
 	public Color getBgColor() {
 		return this.bgColor;
+	}
+	
+	public JTextArea getConsole() {
+		return this.console;
+	}
+	
+	public ConfigHandler getConfigHandler() {
+		return configHandler;
+	}
+	
+	public String getLogin() {
+		return login;
 	}
 
 	public void setLogger(BLog logger) {
 		this.logger = logger;
-	}
-
-	public JTextArea getConsole() {
-		return this.console;
-	}
-
-	public ConfigHandler getConfigHandler() {
-		return configHandler;
 	}
 }
