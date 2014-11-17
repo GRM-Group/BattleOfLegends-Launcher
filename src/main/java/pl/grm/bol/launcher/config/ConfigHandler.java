@@ -5,8 +5,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
 import java.util.logging.Level;
 
 import javax.swing.JTextArea;
@@ -24,15 +22,13 @@ import pl.grm.bol.lib.Config;
 
 public class ConfigHandler {
 	public static final String	LOG_FILE_NAME		= "launcher.log";
-	public static final String	LAUNCHER_VERSION	= "0.0.1";
+	public static final String	LAUNCHER_VERSION	= "0.0.2";
 	private Wini				ini;
-	private Presenter			presenter;
 	private ConnHandler			connHandler;
 	private BLog				logger;
 	private String				login;
 	
 	public ConfigHandler(Presenter presenter) {
-		this.presenter = presenter;
 		logger = new BLog("launcher.log");
 		connHandler = new ConnHandler(logger);
 		presenter.setLogger(logger);
@@ -96,22 +92,8 @@ public class ConfigHandler {
 		this.login = login;
 		String pass = new String(password);
 		String salt = connHandler.getSalt(login);
-		try {
-			// String hash = Hashing.hash(pass, "SHA-256", salt);
-			String hash = PasswordHash.createHash(pass, salt);
-			return connHandler.login(login, hash);
-			// return connHandler.login(login,
-			// Hashing.hash(new String(password), "SHA-256"));
-		}
-		catch (NoSuchAlgorithmException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		catch (InvalidKeySpecException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return false;
+		String hash = PasswordHash.hash(pass, salt);
+		return connHandler.login(login, hash);
 	}
 	
 	public void setConsole(JTextArea console) {
