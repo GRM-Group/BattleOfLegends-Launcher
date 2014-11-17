@@ -29,6 +29,7 @@ public class ConfigHandler {
 	private Presenter			presenter;
 	private ConnHandler			connHandler;
 	private BLog				logger;
+	private String				login;
 	
 	public ConfigHandler(Presenter presenter) {
 		this.presenter = presenter;
@@ -92,6 +93,7 @@ public class ConfigHandler {
 	}
 	
 	public Boolean login(String login, char[] password) {
+		this.login = login;
 		String pass = new String(password);
 		String salt = connHandler.getSalt(login);
 		try {
@@ -130,5 +132,9 @@ public class ConfigHandler {
 	
 	public void setIni(Wini ini) {
 		this.ini = ini;
+	}
+	
+	public String getLogin() {
+		return login;
 	}
 }
