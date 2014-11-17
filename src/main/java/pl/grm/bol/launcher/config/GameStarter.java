@@ -28,11 +28,13 @@ public class GameStarter {
 	private static File			gameFile;
 	private static String		gameFilePath;
 	
+	public GameStarter() {
+		logger = new BLog("gameinit.log");
+	}
+	
 	public static void start(Presenter presenter) {
 		GameStarter.presenter = presenter;
-		progresBar = presenter.getMainWindow().getRightPanel().getGamePanel()
-				.getProgressBar();
-		logger = new BLog("gameinit.log");
+		progresBar = presenter.getMainWindow().getRightPanel().getGamePanel().getProgressBar();
 		logger.info("Starting update ...");
 		boolean runAgain;
 		do {
@@ -61,6 +63,7 @@ public class GameStarter {
 						logger.info("Wrong Permission Level: ");
 				}
 			} else {
+				logger.info("Problem with game file \n Trying to redownload");
 				downloadGame();
 				runAgain = true;
 			}
@@ -71,9 +74,12 @@ public class GameStarter {
 		
 	}
 	
-	private static void downloadGame() {
+	public static void downloadGame(String... params) {
+		if (params != null) {
+			version = params[0];
+		}
 		try {
-			String fileName = "BattleOfLegends-" + version + "-SNAPSHOT.jar";
+			String fileName = "BattleOfLegends-" + "0.0.0" + "-SNAPSHOT.jar";
 			URL website = new URL(Config.SERVER_LINK + "jenkins/artifacts/" + fileName);
 			ReadableByteChannel rbc = Channels.newChannel(website.openStream());
 			FileOutputStream fos;
@@ -105,16 +111,15 @@ public class GameStarter {
 	 */
 	private static void runGame(boolean... runParams) {
 		String separator = System.getProperty("file.separator");
-		String javaPath = System.getProperty("java.home") + separator + "bin" + separator
-				+ "java";
+		String javaPath = System.getProperty("java.home") + separator + "bin" + separator + "java";
 		String dirPath = System.getProperty("user.dir");
 		File dir = new File(dirPath);
-		String[] params = {"a", "b", "c", "d"};
+		String[] params = {"a", "b", "c"};
 		if (runParams[0]) {
 			params[0] = "runWithServerToConnect";
 		}
-		ProcessBuilder processBuilder = new ProcessBuilder(javaPath, "-jar",
-				gameFilePath, params[0]);
+		ProcessBuilder processBuilder = new ProcessBuilder(javaPath, "-jar", gameFilePath,
+				params[0]);
 		try {
 			processBuilder.directory(dir);
 			processBuilder.start();
@@ -136,9 +141,8 @@ public class GameStarter {
 				params[2] = "";
 			}
 			
-			ProcessBuilder processBuilder2 = new ProcessBuilder(javaPath, "-jar",
-					gameFilePath, "-cp", "pl.grm.bol.devwindow.BattleOfLegendsDev",
-					params[1], params[2]);
+			ProcessBuilder processBuilder2 = new ProcessBuilder(javaPath, "-jar", gameFilePath,
+					"-cp", "pl.grm.bol.devwindow.BattleOfLegendsDev", params[1], params[2]);
 			try {
 				processBuilder2.directory(dir);
 				processBuilder2.start();
@@ -174,9 +178,8 @@ public class GameStarter {
 		}
 	}
 	
-	private static boolean gameFileExists() {
-		gameFilePath = Config.BOL_CONF_PATH + "BattleOfLegends-" + version
-				+ "-SNAPSHOT.jar";
+	public static boolean gameFileExists() {
+		gameFilePath = Config.BOL_CONF_PATH + "BattleOfLegends-" + version + "-SNAPSHOT.jar";
 		gameFile = new File(gameFilePath);
 		if (gameFile.exists()) { return true; }
 		return false;

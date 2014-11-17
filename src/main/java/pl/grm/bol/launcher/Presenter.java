@@ -167,12 +167,7 @@ public class Presenter {
 				gamePanel.getLaunchButton().setEnabled(false);
 				JProgressBar progressBar = gamePanel.getProgressBar();
 				progressBar.setValue(5);
-				if (configHandler.isUpToDate("Game")) {
-					logger.info("Game is up to date");
-					progressBar.setValue(20);
-					logger.info("Starting game");
-					GameStarter.start(Presenter.this);
-				} else {
+				if (!configHandler.isUpToDate("Game")) {
 					progressBar.setValue(7);
 					logger.info("Game must be updated!");
 					int confirmed = JOptionPane.showConfirmDialog(mainWindow,
@@ -184,20 +179,18 @@ public class Presenter {
 						progressBar.setToolTipText("Updating Game");
 						progressBar.setString("Updating Game");
 						progressBar.setValue(9);
-						// if (UpdaterStarter.startUpdater(logger, progressBar))
-						// {
-						// progressBar.setToolTipText("Restarting Game");
-						// progressBar.setString("Restarting Game");
-						// progressBar.setValue(100);
-						// return true;
-						// }
-						// TODO game updater
-						logger.info("Game update failed!");
 					} else {
 						logger.info("Game update cancelled!");
+						return false;
 					}
+				} else {
+					logger.info("Game is up to date");
+					progressBar.setValue(20);
+					logger.info("Starting game");
 				}
-				return false;
+				GameStarter.start(Presenter.this);
+				logger.info("Game update failed!");
+				return true;
 			}
 			
 			@Override
