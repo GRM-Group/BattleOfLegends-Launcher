@@ -56,6 +56,11 @@ public class MainWindow extends JFrame {
 		presenter.addWindow(this);
 		addWindowListener(new WindowAdapter() {
 			@Override
+			public void windowOpened(WindowEvent e) {
+				rightPanel.getLoginPanel().getLoginField().requestFocus();
+			}
+			
+			@Override
 			public void windowClosing(WindowEvent e) {
 				int confirmed = JOptionPane.showConfirmDialog(MainWindow.this,
 						"Are you sure you want to exit the program?", "Exit Program Message Box",

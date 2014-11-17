@@ -47,6 +47,7 @@ public class GamePanel extends JPanel {
 		label = new JLabel("");
 		add(label);
 		settingsButton = new JButton("Settings");
+		settingsButton.setMnemonic('e');
 		settingsButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -62,8 +63,10 @@ public class GamePanel extends JPanel {
 		updateProgressBar.setStringPainted(true);
 		add(updateProgressBar);
 		typeCheckBox = new JCheckBox("Online");
+		typeCheckBox.setMnemonic('o');
 		add(typeCheckBox);
 		launchButton = new JButton("Start");
+		launchButton.setMnemonic('s');
 		launchButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {

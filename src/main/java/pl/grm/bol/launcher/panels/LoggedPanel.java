@@ -50,6 +50,7 @@ public class LoggedPanel extends JPanel {
 		add(playerInfoPanel, BorderLayout.CENTER);
 		
 		btnLogout = new JButton("Logout");
+		btnLogout.setMnemonic('l');
 		btnLogout.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
