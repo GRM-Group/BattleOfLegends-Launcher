@@ -110,10 +110,7 @@ public class UpdaterStarter {
 	}
 	
 	public static boolean startProcess(File confDir) {
-		
-		logger.info("Updater file to run: " + Config.BOL_MAIN_PATH + fileName
-				+ "  & launcher jar Path: " + jarFileAbsPath + "  & directory: " + Config.USER_DIR);
-		
+		logger.info("Starting Process...");
 		ProcessBuilder processBuilder = new ProcessBuilder(Config.JAVA_PATH, "-jar",
 				Config.BOL_MAIN_PATH + fileName, jarFileAbsPath, Config.LAUNCHER_PID,
 				Config.USER_DIR);

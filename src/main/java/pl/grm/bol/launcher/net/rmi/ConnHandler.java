@@ -33,15 +33,7 @@ public class ConnHandler {
 				logger.log(Level.SEVERE, e.toString(), e);
 			}
 			catch (RemoteException e) {
-				Object[] opts = {"Reconnect", "Stay Ofline"};
-				int confirmed = JOptionPane.showOptionDialog(null,
-						"Connection failed.\nWant to try to connect again?",
-						"Reconnect Message Box", JOptionPane.YES_NO_OPTION,
-						JOptionPane.WARNING_MESSAGE, null, opts, opts[0]);
-				if (confirmed == JOptionPane.YES_OPTION) {
-					logger.info("Trying to connect ...");
-					redo = true;
-				}
+				redo = showReconnectDialog(logger);
 				logger.log(Level.SEVERE, e.toString(), e);
 			}
 			catch (NotBoundException e) {
@@ -86,13 +78,7 @@ public class ConnHandler {
 				logger.log(Level.SEVERE, e.toString(), e);
 			}
 			catch (RemoteException e) {
-				int confirmed = JOptionPane.showConfirmDialog(component,
-						"Connection lost.\nDo You want to try to reconnect?",
-						"Reconnect Message Box", JOptionPane.YES_NO_OPTION);
-				if (confirmed == JOptionPane.YES_OPTION) {
-					logger.info("Trying to reconnect ...");
-					redo = true;
-				}
+				redo = showReconnectDialog(logger);
 				logger.log(Level.SEVERE, e.toString(), e);
 			}
 			catch (NotBoundException e) {
@@ -148,6 +134,18 @@ public class ConnHandler {
 			if (correct) { return true; }
 			String str = "Bad password!\n";
 			logger.info(str);
+		}
+		return false;
+	}
+	
+	public boolean showReconnectDialog(BLog logger) {
+		Object[] opts = {"Reconnect", "Stay Ofline"};
+		int confirmed = JOptionPane.showOptionDialog(null,
+				"Connection failed.\nWant to try to connect again?", "Reconnect Message Box",
+				JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, opts, opts[0]);
+		if (confirmed == JOptionPane.YES_OPTION) {
+			logger.info("Trying to connect ...");
+			return true;
 		}
 		return false;
 	}

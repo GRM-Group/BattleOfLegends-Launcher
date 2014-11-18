@@ -8,6 +8,9 @@ import javax.imageio.ImageIO;
 
 public class ResourceLoader {
 	
+	/**
+	 * @return Background Image
+	 */
 	public static BufferedImage getBGImage() {
 		BufferedImage background = null;
 		try {

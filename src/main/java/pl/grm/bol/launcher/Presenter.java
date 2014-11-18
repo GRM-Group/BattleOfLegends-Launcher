@@ -1,17 +1,11 @@
 package pl.grm.bol.launcher;
 
 import java.awt.Color;
-import java.util.concurrent.ExecutionException;
-import java.util.logging.Level;
 
-import javax.swing.JOptionPane;
-import javax.swing.JProgressBar;
 import javax.swing.JTextArea;
 import javax.swing.SwingWorker;
 
-import pl.grm.bol.launcher.boxes.SettingsDialog;
 import pl.grm.bol.launcher.core.ConfigHandler;
-import pl.grm.bol.launcher.core.GameStarter;
 import pl.grm.bol.launcher.core.SwingWorkersImpl;
 import pl.grm.bol.launcher.panels.AdvPanel;
 import pl.grm.bol.launcher.panels.GamePanel;
@@ -90,93 +84,24 @@ public class Presenter {
 	}
 	
 	public synchronized void pressedSettingsButton() {
-		SwingWorker<Boolean, Void> worker = new SwingWorker<Boolean, Void>() {
-			@Override
-			protected Boolean doInBackground() throws Exception {
-				SettingsDialog setDBox = new SettingsDialog(Presenter.this);
-				setDBox.setVisible(true);
-				setDBox.setModal(true);
-				return null;
-			}
-			
-			@Override
-			protected void done() {
-				logger.info("Settings");
-			}
-		};
+		SwingWorker<Boolean, Void> worker = SwingWorkersImpl.Setings();
 		worker.execute();
 	}
 	
 	public synchronized void pressedStartButton() {
-		SwingWorker<Boolean, Void> worker = new SwingWorker<Boolean, Void>() {
-			@Override
-			protected Boolean doInBackground() throws Exception {
-				gamePanel.getLaunchButton().setEnabled(false);
-				JProgressBar progressBar = gamePanel.getProgressBar();
-				progressBar.setValue(5);
-				if (!configHandler.isUpToDate("Game")) {
-					progressBar.setValue(7);
-					logger.info("Game must be updated!");
-					int confirmed = JOptionPane.showConfirmDialog(mainWindow,
-							"Are you sure you want to update the game?",
-							"Exit Program Message Box", JOptionPane.YES_NO_OPTION);
-					if (confirmed == JOptionPane.YES_OPTION) {
-						logger.info("Game Updating ...");
-						progressBar.setStringPainted(true);
-						progressBar.setToolTipText("Updating Game");
-						progressBar.setString("Updating Game");
-						progressBar.setValue(9);
-					} else {
-						logger.info("Game update cancelled!");
-						return false;
-					}
-				} else {
-					logger.info("Game is up to date");
-					progressBar.setValue(20);
-					logger.info("Starting game");
-				}
-				GameStarter gameStarter = new GameStarter();
-				gameStarter.start(Presenter.this);
-				logger.info("Game update failed!");
-				return true;
-			}
-			
-			@Override
-			protected void done() {
-				try {
-					if (super.get()) {
-						Thread.sleep(2000L);
-						System.exit(0);
-					}
-				}
-				catch (InterruptedException e) {
-					logger.log(Level.SEVERE, e.toString(), e);
-				}
-				catch (ExecutionException e) {
-					logger.log(Level.SEVERE, e.toString(), e);
-				}
-				gamePanel.getLaunchButton().setEnabled(true);
-				JProgressBar progressBar = gamePanel.getProgressBar();
-				progressBar.setValue(0);
-				progressBar.setStringPainted(false);
-			}
-		};
+		SwingWorker<Boolean, Void> worker = SwingWorkersImpl.Start();
 		worker.execute();
 	}
 	
-	public void pressedLogoutButton() {
-		SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
-			@Override
-			protected Void doInBackground() throws Exception {
-				loginPanel.setVisible(true);
-				loggedPanel.setVisible(false);
-				logger.info("Logout!");
-				return null;
-			}
-		};
+	public synchronized void pressedLogoutButton() {
+		SwingWorker<Void, Void> worker = SwingWorkersImpl.Logout();
 		worker.execute();
 	}
 	
+	public void setLogger(BLog logger) {
+		this.logger = logger;
+	}
+
 	public MainWindow getMainWindow() {
 		return mainWindow;
 	}
@@ -196,8 +121,21 @@ public class Presenter {
 	public String getLogin() {
 		return login;
 	}
-
-	public void setLogger(BLog logger) {
-		this.logger = logger;
+	
+	public GamePanel getGamePanel() {
+		return gamePanel;
 	}
+	
+	public AdvPanel getAdvPanel() {
+		return advPanel;
+	}
+	
+	public LoginPanel getLoginPanel() {
+		return loginPanel;
+	}
+	
+	public LoggedPanel getLoggedPanel() {
+		return loggedPanel;
+	}
+	
 }
