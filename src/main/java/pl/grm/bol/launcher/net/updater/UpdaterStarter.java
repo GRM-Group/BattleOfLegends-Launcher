@@ -19,9 +19,10 @@ import org.ini4j.InvalidFileFormatException;
 import pl.grm.bol.lib.BLog;
 import pl.grm.bol.lib.Config;
 import pl.grm.bol.lib.FileOperation;
+import pl.grm.bol.lib.MD5HashChecksum;
 
 public class UpdaterStarter {
-	private static String		version	= "0.0.0";
+	private static String		version	= "";
 	private static String		fileName;
 	private static String		jarFileAbsPath;
 	private static JProgressBar	progressBar;
@@ -46,28 +47,30 @@ public class UpdaterStarter {
 		catch (UnsupportedEncodingException e) {
 			logger.log(Level.SEVERE, e.toString(), e);
 		}
-		File confDir = new File(Config.BOL_MAIN_PATH);
-		if (!confDir.exists()) {
+		File dir = new File(Config.BOL_MAIN_PATH);
+		if (!dir.exists()) {
 			FileOperation.createBOLDir();
 		}
-		checkoutServerVersion();
-		logger.info("Downloading updater ...");
-		downloadUpdater();
-		
-		if (startProcess(confDir)) { return true; }
+		checkoutUpdaterVersion();
+		if (!correctFileExists()) {
+			logger.info("Downloading updater ...");
+			downloadUpdater();
+		}
+		if (startProcess(dir)) { return true; }
 		return false;
 	}
 	
 	/**
 	 * Check version of launcher on the web server.
 	 */
-	private static void checkoutServerVersion() {
+	private static void checkoutUpdaterVersion() {
 		Ini sIni = new Ini();
 		URL url;
 		try {
 			url = new URL(Config.SERVER_VERSION_LINK);
 			sIni.load(url);
-			version = sIni.get("Launcher", "last_version");
+			version = sIni.get("Updater", "last_version");
+			fileName = "BoL-Launcher_Updater-" + version + Config.RELEASE_TYPE;
 		}
 		catch (MalformedURLException e) {
 			logger.log(Level.SEVERE, e.toString(), e);
@@ -81,30 +84,45 @@ public class UpdaterStarter {
 	}
 	
 	/**
-	 * Downloads Updater jar to run it.
+	 * If file exists than check checksum
+	 * 
+	 * @return true if correct file already exists on computer
 	 */
-	private static void downloadUpdater() {
-		progressBar.setValue(14);
-		fileName = "BoL-Launcher_Updater-" + version + Config.RELEASE_TYPE;
-		if (!new File(Config.BOL_MAIN_PATH + fileName).exists()) {
+	private static boolean correctFileExists() {
+		File file = new File(Config.BOL_MAIN_PATH + fileName);
+		if (file.exists()) {
 			try {
-				URL website = new URL(Config.SERVER_SITE_LINK + "jenkins/artifacts/" + fileName);
-				ReadableByteChannel rbc = Channels.newChannel(website.openStream());
-				FileOutputStream fos = new FileOutputStream(Config.BOL_MAIN_PATH + fileName);
-				progressBar.setValue(35);
-				fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
-				progressBar.setValue(65);
-				fos.close();
-			}
-			catch (FileNotFoundException e) {
-				logger.log(Level.SEVERE, e.toString(), e);
-			}
-			catch (MalformedURLException e) {
-				logger.log(Level.SEVERE, e.toString(), e);
+				return MD5HashChecksum.isFileCorrect(new File(fileName));
 			}
 			catch (IOException e) {
 				logger.log(Level.SEVERE, e.toString(), e);
 			}
+		}
+		return false;
+	}
+	
+	/**
+	 * Downloads Updater jar to run it.
+	 */
+	private static void downloadUpdater() {
+		progressBar.setValue(14);
+		try {
+			URL website = new URL(Config.SERVER_SITE_LINK + "jenkins/artifacts/" + fileName);
+			ReadableByteChannel rbc = Channels.newChannel(website.openStream());
+			FileOutputStream fos = new FileOutputStream(Config.BOL_MAIN_PATH + fileName);
+			progressBar.setValue(35);
+			fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
+			progressBar.setValue(65);
+			fos.close();
+		}
+		catch (FileNotFoundException e) {
+			logger.log(Level.SEVERE, e.toString(), e);
+		}
+		catch (MalformedURLException e) {
+			logger.log(Level.SEVERE, e.toString(), e);
+		}
+		catch (IOException e) {
+			logger.log(Level.SEVERE, e.toString(), e);
 		}
 		progressBar.setValue(80);
 	}
