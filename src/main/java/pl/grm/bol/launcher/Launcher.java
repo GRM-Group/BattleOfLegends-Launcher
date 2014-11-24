@@ -2,8 +2,9 @@ package pl.grm.bol.launcher;
 
 import javax.swing.SwingUtilities;
 
-import pl.grm.bol.launcher.boxes.LauncherUpdateDialog;
 import pl.grm.bol.launcher.core.ConfigHandler;
+import pl.grm.bol.lib.TypeOfProject;
+import pl.grm.bol.lib.net.UpdateFrame;
 
 /**
  * Launcher main class.
@@ -27,13 +28,14 @@ public class Launcher {
 				}
 			});
 		} else {
-			try {
-				LauncherUpdateDialog updateDBox = new LauncherUpdateDialog();
-				updateDBox.updateLauncher(presenter);
-			}
-			catch (Exception e) {
-				e.printStackTrace();
-			}
+			SwingUtilities.invokeLater(new Runnable() {
+				@Override
+				public void run() {
+					UpdateFrame updateDBox = new UpdateFrame("Launcher Updater Downloader",
+							TypeOfProject.LAUNCHER);
+					updateDBox.setVisible(true);
+				}
+			});
 		}
 	}
 }

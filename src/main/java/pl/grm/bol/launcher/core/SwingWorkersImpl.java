@@ -7,8 +7,11 @@ import javax.swing.JOptionPane;
 import javax.swing.JProgressBar;
 import javax.swing.SwingWorker;
 
+import pl.grm.bol.launcher.MainWindow;
 import pl.grm.bol.launcher.Presenter;
 import pl.grm.bol.launcher.boxes.SettingsDialog;
+import pl.grm.bol.launcher.panels.RightPanel;
+import pl.grm.bol.launcher.updater.GameStarter;
 import pl.grm.bol.lib.BLog;
 
 public class SwingWorkersImpl {
@@ -21,13 +24,13 @@ public class SwingWorkersImpl {
 	
 	public static SwingWorker<Boolean, Void> Login(char[] password) {
 		pass = password;
+		final MainWindow mainWindow = presenter.getMainWindow();
+		final RightPanel rightPanel = mainWindow.getRightPanel();
 		SwingWorker<Boolean, Void> worker = new SwingWorker<Boolean, Void>() {
 			@Override
 			protected Boolean doInBackground() throws Exception {
-				presenter.getMainWindow().getRightPanel().getLoginPanel().getLoginButton()
-						.setEnabled(false);
-				presenter.getMainWindow().getRightPanel().getGamePanel().getProgressBar()
-						.setIndeterminate(true);
+				rightPanel.getLoginPanel().getLoginButton().setEnabled(false);
+				rightPanel.getGamePanel().getProgressBar().setIndeterminate(true);
 				boolean success = presenter.getConfigHandler().login(presenter.getLogin(), pass);
 				pass = null;
 				return success;
@@ -36,16 +39,14 @@ public class SwingWorkersImpl {
 			@Override
 			protected void done() {
 				try {
-					presenter.getMainWindow().getRightPanel().getLoginPanel().getLoginButton()
-							.setEnabled(true);
-					presenter.getMainWindow().getRightPanel().getGamePanel().getProgressBar()
-							.setIndeterminate(false);
+					
+					rightPanel.getLoginPanel().getLoginButton().setEnabled(true);
+					rightPanel.getGamePanel().getProgressBar().setIndeterminate(false);
 					if (super.get()) {
 						presenter.getConfigHandler().getLogger().info("Logged successfully!");
-						presenter.getMainWindow().getRightPanel().getLoginPanel().setVisible(false);
-						presenter.getMainWindow().getRightPanel().getLoggedPanel().getLblLoggedAs()
-								.setText(presenter.getLogin());
-						presenter.getMainWindow().getRightPanel().getLoggedPanel().setVisible(true);
+						rightPanel.getLoginPanel().setVisible(false);
+						rightPanel.getLoggedPanel().getLblLoggedAs().setText(presenter.getLogin());
+						rightPanel.getLoggedPanel().setVisible(true);
 					} else {
 						presenter.getConfigHandler().getLogger().info("Problem with logging in!");
 					}

@@ -14,7 +14,7 @@ import org.ini4j.Wini;
 import pl.grm.bol.launcher.Presenter;
 import pl.grm.bol.launcher.math.PasswordHash;
 import pl.grm.bol.launcher.math.VersionComparator;
-import pl.grm.bol.launcher.net.rmi.ConnHandler;
+import pl.grm.bol.launcher.net.ConnHandler;
 import pl.grm.bol.lib.BLog;
 import pl.grm.bol.lib.Config;
 import pl.grm.bol.lib.FileOperation;
@@ -76,11 +76,13 @@ public class ConfigHandler {
 	public boolean isUpToDate(String string) {
 		Ini sIni = new Ini();
 		VersionComparator cmp = new VersionComparator();
+		String sVersion = null;
+		String lVersion;
 		try {
 			URL url = new URL(Config.SERVER_VERSION_LINK);
 			sIni.load(url);
-			String sVersion = sIni.get(string, "last_version");
-			String lVersion = ini.get(string, "version");
+			sVersion = sIni.get(string, "last_version");
+			lVersion = ini.get(string, "version");
 			
 			int result = cmp.compare(sVersion, lVersion);
 			if (result <= 0) {
@@ -96,6 +98,7 @@ public class ConfigHandler {
 		catch (IOException e) {
 			logger.log(Level.SEVERE, e.toString(), e);
 		}
+		logger.info("New version: " + sVersion);
 		return false;
 	}
 	

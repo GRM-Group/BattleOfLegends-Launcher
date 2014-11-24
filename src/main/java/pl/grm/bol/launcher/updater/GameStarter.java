@@ -1,4 +1,4 @@
-package pl.grm.bol.launcher.core;
+package pl.grm.bol.launcher.updater;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -16,7 +16,7 @@ import org.ini4j.Ini;
 import org.ini4j.InvalidFileFormatException;
 
 import pl.grm.bol.launcher.Presenter;
-import pl.grm.bol.launcher.net.rmi.ConnHandler;
+import pl.grm.bol.launcher.net.ConnHandler;
 import pl.grm.bol.lib.BLog;
 import pl.grm.bol.lib.Config;
 

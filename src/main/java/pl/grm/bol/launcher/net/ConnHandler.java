@@ -1,4 +1,4 @@
-package pl.grm.bol.launcher.net.rmi;
+package pl.grm.bol.launcher.net;
 
 import java.awt.Component;
 import java.rmi.AccessException;
