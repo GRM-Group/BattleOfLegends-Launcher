@@ -34,7 +34,7 @@ public class ConnHandler {
 			}
 			catch (RemoteException e) {
 				redo = showReconnectDialog(logger);
-				logger.log(Level.SEVERE, e.toString(), e);
+				logger.log(Level.SEVERE, "Connection problem.", e);
 			}
 			catch (NotBoundException e) {
 				logger.log(Level.SEVERE, e.toString(), e);

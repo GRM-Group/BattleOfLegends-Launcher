@@ -8,8 +8,7 @@ public class TestMD5Checksum {
 	
 	@Test
 	public final void testGetFileChecksum() {
-		File file = new File(
-				"C:\\Users\\£ukasz\\AppData\\Roaming\\BOL\\BoL-Launcher-0.0.2-SNAPSHOT.jar");
+		File file = new File("C:\\BOL\\BoL-Launcher-0.0.2-SNAPSHOT.jar");
 		// String checksum = MD5HashChecksum.getFileChecksum(file);
 		
 		// assertThat(checksum,
@@ -18,8 +17,7 @@ public class TestMD5Checksum {
 	
 	@Test
 	public final void testEqualmd5Checksums() {
-		File file = new File(
-				"C:\\Users\\£ukasz\\AppData\\Roaming\\BOL\\BoL-Launcher-0.0.2-SNAPSHOT.jar");
+		File file = new File("C:\\BOL\\BoL-Launcher-0.0.2-SNAPSHOT.jar");
 		// String fileName = file.getName();
 		// String checksum = MD5HashChecksum.getFileChecksum(file);
 		// boolean result = MD5HashChecksum.equalmd5Checksums(checksum, file);
@@ -28,8 +26,7 @@ public class TestMD5Checksum {
 	
 	@Test
 	public final void testGetOriginalChecksumForFile() {
-		File file = new File(
-				"C:\\Users\\£ukasz\\AppData\\Roaming\\BOL\\BoL-Launcher-0.0.2-SNAPSHOT.jar");
+		File file = new File("C:\\BOL\\BoL-Launcher-0.0.2-SNAPSHOT.jar");
 		String result = null;
 		// try {
 		// result = MD5HashChecksum.getOriginalChecksumForFile(file);
@@ -43,8 +40,7 @@ public class TestMD5Checksum {
 	
 	@Test
 	public final void testIsFileCorrect() {
-		File file = new File(
-				"C:\\Users\\£ukasz\\AppData\\Roaming\\BOL\\BoL-Launcher-0.0.2-SNAPSHOT.jar");
+		File file = new File("C:\\BOL\\BoL-Launcher-0.0.2-SNAPSHOT.jar");
 		boolean result = false;
 		// try {
 		// result = MD5HashChecksum.isFileCorrect(file);

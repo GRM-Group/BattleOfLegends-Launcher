@@ -34,6 +34,7 @@ public class Launcher {
 					UpdateFrame updateDBox = new UpdateFrame("Launcher Updater Downloader",
 							TypeOfProject.LAUNCHER);
 					updateDBox.setVisible(true);
+					updateDBox.getButtonUpdate().setEnabled(true);
 				}
 			});
 		}
